@@ -1,0 +1,19 @@
+.section {
+    width: 600px;
+}
+
+.tabsWrapper {
+    display: flex;
+    width: 100%;
+}
+
+.ingredientsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+}
+
+.ingredientsWrapper {
+    max-height: calc(100vh - 88px - 180px - 56px);
+    overflow: auto;
+}
