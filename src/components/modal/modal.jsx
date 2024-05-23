@@ -29,6 +29,6 @@ export default function Modal({ title, onClose = () => {}, children }) {
 
 Modal.propTypes = {
     title: PropTypes.string,
-    children: PropTypes.elementType,
+    children: PropTypes.element,
     onClose: PropTypes.func,
 }
