@@ -11,7 +11,7 @@ export default function Modal({ title, onClose = () => {}, children }) {
         <>
             <ModalOverlay onClose={onClose} />
 
-            <div className={`${styles.modal} pt-10 pl-10 pr-10`}>
+            <div className={`${styles.modal} pt-10 pl-10 pr-10 pb-15`}>
                 <div className={`${styles.header}`}>
                     <h1 className="text text_type_main-large">{title}</h1>
 

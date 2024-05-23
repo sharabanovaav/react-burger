@@ -8,6 +8,7 @@ import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 import Modal from '../modal/modal'
+import OrderDetails from './order-details/order-details'
 
 export default function BurgerConstructor({ ingredients = [] }) {
     const [isModalOpen, setIsModalOpen] = useState()
@@ -20,7 +21,7 @@ export default function BurgerConstructor({ ingredients = [] }) {
 
     const renderModal = () => (
         <Modal onClose={toggleModal}>
-            <p>Спасибо за внимание!</p>
+            <OrderDetails />
         </Modal>
     )
 
