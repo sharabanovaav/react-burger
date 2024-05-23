@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import styles from './ingredients-list.module.css'
 import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 
-export default function IngredientsList({ bun, ingredients }) {
+export default function IngredientsList({ bun, ingredients = [] }) {
     return (
         <div className={styles.wrapper}>
             {bun && (
@@ -54,8 +54,4 @@ export default function IngredientsList({ bun, ingredients }) {
 IngredientsList.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropTypes),
     bun: ingredientPropTypes,
-}
-
-IngredientsList.defaultProps = {
-    ingredients: [],
 }

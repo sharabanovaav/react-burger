@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 import styles from './ingredient-card.module.css'
 
-export default function IngredientCard({ ingredient, count }) {
+export default function IngredientCard({ ingredient, count = 0 }) {
     return (
         <div className={styles.card}>
             {count > 0 && (
@@ -37,8 +37,4 @@ export default function IngredientCard({ ingredient, count }) {
 IngredientCard.propTypes = {
     ingredient: ingredientPropTypes.isRequired,
     count: PropTypes.number,
-}
-
-IngredientCard.defaultProps = {
-    count: 0,
 }

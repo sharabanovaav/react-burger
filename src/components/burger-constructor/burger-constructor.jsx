@@ -7,7 +7,7 @@ import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 
-export default function BurgerConstructor({ ingredients }) {
+export default function BurgerConstructor({ ingredients = [] }) {
     const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
 
     return (
@@ -30,8 +30,4 @@ export default function BurgerConstructor({ ingredients }) {
 
 BurgerConstructor.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropTypes),
-}
-
-BurgerConstructor.defaultProps = {
-    ingredients: [],
 }

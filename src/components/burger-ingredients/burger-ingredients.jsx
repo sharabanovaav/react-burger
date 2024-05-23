@@ -20,7 +20,7 @@ const ingredientTypes = [
     },
 ]
 
-export default function BurgerIngredients({ ingredients }) {
+export default function BurgerIngredients({ ingredients = [] }) {
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
 
     const ingredientsDict = ingredients.reduce((dict, ingredient) => {
@@ -80,8 +80,4 @@ export default function BurgerIngredients({ ingredients }) {
 
 BurgerIngredients.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientPropTypes),
-}
-
-BurgerIngredients.defaultProps = {
-    ingredients: [],
 }
