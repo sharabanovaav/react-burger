@@ -7,7 +7,7 @@ import {
 
 import styles from './app-header.module.css'
 
-function AppHeader() {
+export default function AppHeader() {
     const renderNavigationLink = (icon, text, isActive = false) => (
         <a
             className={`${styles.link} ${isActive && styles.link_active} pl-5 pr-5 pb-4 pt-4`}
@@ -42,5 +42,3 @@ function AppHeader() {
         </header>
     )
 }
-
-export default AppHeader

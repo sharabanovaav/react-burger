@@ -2,13 +2,17 @@ import {
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
+import PropTypes from 'prop-types'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
+import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 
-function BurgerConstructor() {
+export default function BurgerConstructor({ ingredients }) {
+    const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
+
     return (
         <section className="p-25 pl-4 pr-4">
-            <IngredientsList />
+            <IngredientsList ingredients={ingredients} bun={bun} />
 
             <div className={`${styles.footer} mt-10`}>
                 <div className={styles.price}>
@@ -24,4 +28,10 @@ function BurgerConstructor() {
     )
 }
 
-export default BurgerConstructor
+BurgerConstructor.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientPropTypes),
+}
+
+BurgerConstructor.defaultProps = {
+    ingredients: [],
+}

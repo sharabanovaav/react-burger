@@ -1,8 +1,9 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useState } from 'react'
-import ingredients from '../../utils/ingredients.ts'
+import PropTypes from 'prop-types'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
+import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 
 const ingredientTypes = [
     {
@@ -19,17 +20,17 @@ const ingredientTypes = [
     },
 ]
 
-const ingredientsDict = ingredients.reduce((dict, ingredient) => {
-    if (!dict[ingredient.type]) {
-        dict[ingredient.type] = []
-    }
-
-    dict[ingredient.type].push(ingredient)
-    return dict
-}, {})
-
-function BurgerIngredients() {
+export default function BurgerIngredients({ ingredients }) {
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
+
+    const ingredientsDict = ingredients.reduce((dict, ingredient) => {
+        if (!dict[ingredient.type]) {
+            dict[ingredient.type] = []
+        }
+
+        dict[ingredient.type].push(ingredient)
+        return dict
+    }, {})
 
     const renderTypeTab = ({ type, name }) => (
         <Tab
@@ -68,11 +69,19 @@ function BurgerIngredients() {
                 {ingredientTypes.map(renderTypeTab)}
             </div>
 
-            <div className={`${styles.ingredientsWrapper} custom-scroll`}>
-                {ingredientTypes.map(renderIngredients)}
-            </div>
+            {ingredients.length > 0 && (
+                <div className={`${styles.ingredientsWrapper} custom-scroll`}>
+                    {ingredientTypes.map(renderIngredients)}
+                </div>
+            )}
         </section>
     )
 }
 
-export default BurgerIngredients
+BurgerIngredients.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientPropTypes),
+}
+
+BurgerIngredients.defaultProps = {
+    ingredients: [],
+}

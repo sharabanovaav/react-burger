@@ -3,10 +3,10 @@ import {
     Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
-
+import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 import styles from './ingredient-card.module.css'
 
-function IngredientCard({ ingredient, count }) {
+export default function IngredientCard({ ingredient, count }) {
     return (
         <div className={styles.card}>
             {count > 0 && (
@@ -34,15 +34,11 @@ function IngredientCard({ ingredient, count }) {
     )
 }
 
-const ingredientPropTypes = PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-})
-
 IngredientCard.propTypes = {
     ingredient: ingredientPropTypes.isRequired,
     count: PropTypes.number,
 }
 
-export default IngredientCard
+IngredientCard.defaultProps = {
+    count: 0,
+}

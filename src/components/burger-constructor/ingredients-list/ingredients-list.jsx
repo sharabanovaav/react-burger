@@ -2,48 +2,60 @@ import {
     ConstructorElement,
     DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import ingredients from '../../../utils/ingredients.ts'
+import PropTypes from 'prop-types'
 import styles from './ingredients-list.module.css'
+import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 
-const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
-const mains = ingredients.filter((ingredient) => ingredient.type !== 'bun')
-
-export default function IngredientsList() {
+export default function IngredientsList({ bun, ingredients }) {
     return (
         <div className={styles.wrapper}>
-            <div className="ml-8">
-                <ConstructorElement
-                    type="top"
-                    isLocked
-                    text={bun.name}
-                    price={bun.price}
-                    thumbnail={bun.image}
-                />
-            </div>
+            {bun && (
+                <div className="ml-8">
+                    <ConstructorElement
+                        type="top"
+                        isLocked
+                        text={bun.name}
+                        price={bun.price}
+                        thumbnail={bun.image}
+                    />
+                </div>
+            )}
 
-            <div className={`${styles.fillingWrapper} custom-scroll`}>
-                {mains.map(({ name, image, price, _id }) => (
-                    <div className={styles.filling}>
-                        <DragIcon type="primary" />
-                        <ConstructorElement
-                            key={_id}
-                            text={name}
-                            price={price}
-                            thumbnail={image}
-                        />
-                    </div>
-                ))}
-            </div>
+            {ingredients.length > 0 && (
+                <div className={`${styles.fillingWrapper} custom-scroll`}>
+                    {ingredients.map(({ name, image, price, _id }) => (
+                        <div className={styles.filling} key={_id}>
+                            <DragIcon type="primary" />
+                            <ConstructorElement
+                                text={name}
+                                price={price}
+                                thumbnail={image}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
 
-            <div className="ml-8">
-                <ConstructorElement
-                    type="bottom"
-                    isLocked
-                    text={bun.name}
-                    price={bun.price}
-                    thumbnail={bun.image}
-                />
-            </div>
+            {bun && (
+                <div className="ml-8">
+                    <ConstructorElement
+                        type="bottom"
+                        isLocked
+                        text={bun.name}
+                        price={bun.price}
+                        thumbnail={bun.image}
+                    />
+                </div>
+            )}
         </div>
     )
+}
+
+IngredientsList.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientPropTypes),
+    bun: ingredientPropTypes,
+}
+
+IngredientsList.defaultProps = {
+    ingredients: [],
 }
