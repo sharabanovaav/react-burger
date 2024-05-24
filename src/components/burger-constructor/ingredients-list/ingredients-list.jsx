@@ -22,7 +22,7 @@ export default function IngredientsList({ bun, ingredients = [] }) {
             )}
 
             {ingredients.length > 0 && (
-                <div className={`${styles.fillingWrapper} custom-scroll`}>
+                <div className={`${styles.fillings} custom-scroll`}>
                     {ingredients.map(({ name, image, price, _id }) => (
                         <div className={styles.filling} key={_id}>
                             <DragIcon type="primary" />
