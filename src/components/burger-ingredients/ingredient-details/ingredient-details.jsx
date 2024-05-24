@@ -32,7 +32,7 @@ export default function IngredientDetails({ ingredient }) {
         </div>
     )
     return (
-        <div className={`${styles.content} mt-20`}>
+        <section className={`${styles.content} mt-20`}>
             <img
                 className="mb-4"
                 src={ingredient.image_large}
@@ -45,7 +45,7 @@ export default function IngredientDetails({ ingredient }) {
                     renderNutrition(name, ingredient[key])
                 )}
             </div>
-        </div>
+        </section>
     )
 }
 

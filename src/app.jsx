@@ -12,9 +12,11 @@ export default function App() {
         const getIngredients = async () => {
             try {
                 const res = await fetch(url)
-                const { data } = await res.json()
+                const { data, success } = await res.json()
 
-                setIngredients([...ingredients, ...data])
+                if (success) {
+                    setIngredients(data)
+                }
             } catch (e) {
                 console.log(e)
             }
@@ -26,7 +28,7 @@ export default function App() {
     return (
         <div>
             <AppHeader />
-            <div className={styles.content}>
+            <main className={styles.main}>
                 <BurgerIngredients
                     className={styles.section}
                     ingredients={ingredients}
@@ -35,7 +37,7 @@ export default function App() {
                     className={styles.section}
                     ingredients={ingredients}
                 />
-            </div>
+            </main>
         </div>
     )
 }

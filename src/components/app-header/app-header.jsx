@@ -19,7 +19,7 @@ export default function AppHeader() {
     )
     return (
         <header className={`${styles.header} pb-4 pt-4`}>
-            <div className={styles.header_content}>
+            <nav className={styles.navigation}>
                 <div className={styles.links}>
                     {renderNavigationLink(
                         <BurgerIcon type="primary" />,
@@ -38,7 +38,7 @@ export default function AppHeader() {
                     <ProfileIcon type="secondary" />,
                     'Личный кабинет'
                 )}
-            </div>
+            </nav>
         </header>
     )
 }

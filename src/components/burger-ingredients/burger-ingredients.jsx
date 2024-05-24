@@ -47,7 +47,7 @@ export default function BurgerIngredients({ ingredients = [] }) {
         <div key={`ingredient-${type}`}>
             <h2 className="text text_type_main-medium mb-6 mt-10">{name}</h2>
 
-            <div className={`${styles.ingredientsList} pl-4 pr-4`}>
+            <div className={`${styles.list} pl-4 pr-4`}>
                 {ingredientsDict[type].map((ingredient, index) => (
                     <IngredientCard
                         key={ingredient._id}
@@ -65,12 +65,12 @@ export default function BurgerIngredients({ ingredients = [] }) {
                 Соберите бургер
             </h1>
 
-            <div className={styles.tabsWrapper}>
+            <div className={styles.tabs}>
                 {ingredientTypes.map(renderTypeTab)}
             </div>
 
             {ingredients.length > 0 && (
-                <div className={`${styles.ingredientsWrapper} custom-scroll`}>
+                <div className={`${styles.ingredients} custom-scroll`}>
                     {ingredientTypes.map(renderIngredients)}
                 </div>
             )}
