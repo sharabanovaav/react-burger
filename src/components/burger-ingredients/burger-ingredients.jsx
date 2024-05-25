@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
 import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
+import useModal from '../../hooks/use-modal'
+import Modal from '../modal/modal'
+import IngredientDetails from './ingredient-details/ingredient-details'
 
 const ingredientTypes = [
     {
@@ -22,6 +25,9 @@ const ingredientTypes = [
 
 export default function BurgerIngredients({ ingredients = [] }) {
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
+    const [activeIngredient, setActiveIngredient] = useState(null)
+
+    const { isModalOpen, openModal, closeModal } = useModal()
 
     const ingredientsDict = ingredients.reduce((dict, ingredient) => {
         if (!dict[ingredient.type]) {
@@ -31,6 +37,22 @@ export default function BurgerIngredients({ ingredients = [] }) {
         dict[ingredient.type].push(ingredient)
         return dict
     }, {})
+
+    const showIngredientDetails = (ingredient) => {
+        setActiveIngredient(ingredient)
+        openModal()
+    }
+
+    const handleModalClose = () => {
+        setActiveIngredient(null)
+        closeModal()
+    }
+
+    const renderModal = () => (
+        <Modal title="Детали ингредиента" onClose={handleModalClose}>
+            <IngredientDetails ingredient={activeIngredient} />
+        </Modal>
+    )
 
     const renderTypeTab = ({ type, name }) => (
         <Tab
@@ -53,6 +75,7 @@ export default function BurgerIngredients({ ingredients = [] }) {
                         key={ingredient._id}
                         ingredient={ingredient}
                         count={index % 5}
+                        onClick={() => showIngredientDetails(ingredient)}
                     />
                 ))}
             </div>
@@ -74,6 +97,8 @@ export default function BurgerIngredients({ ingredients = [] }) {
                     {ingredientTypes.map(renderIngredients)}
                 </div>
             )}
+
+            {isModalOpen && activeIngredient && renderModal()}
         </section>
     )
 }

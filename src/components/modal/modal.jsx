@@ -8,13 +8,13 @@ import ModalOverlay from './modal-overlay/modal-overlay'
 export default function Modal({ title, onClose = () => {}, children }) {
     const modalRoot = document.getElementById('react-modals')
 
-    const closeHandler = (e) => {
-        if (e.keyCode === 27) {
-            onClose()
-        }
-    }
-
     useEffect(() => {
+        const closeHandler = (e) => {
+            if (e.key === 'Escape') {
+                onClose()
+            }
+        }
+
         window.addEventListener('keydown', closeHandler)
         return () => window.removeEventListener('keydown', closeHandler)
     }, [])

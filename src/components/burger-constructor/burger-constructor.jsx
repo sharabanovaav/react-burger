@@ -3,31 +3,31 @@ import {
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
+import useModal from '../../hooks/use-modal'
 
 export default function BurgerConstructor({ ingredients = [] }) {
-    const [isModalOpen, setIsModalOpen] = useState()
+    const { isModalOpen, openModal, closeModal } = useModal()
 
     const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen)
-    }
+    const selectedIngredients = ingredients.filter(
+        (ingredient) => ingredient.type !== 'bun'
+    )
 
     const renderModal = () => (
-        <Modal onClose={toggleModal}>
+        <Modal onClose={closeModal}>
             <OrderDetails />
         </Modal>
     )
 
     return (
         <section className="p-25 pl-4 pr-4">
-            <IngredientsList ingredients={ingredients} bun={bun} />
+            <IngredientsList ingredients={selectedIngredients} bun={bun} />
 
             <div className={`${styles.footer} mt-10`}>
                 <div className={styles.price}>
@@ -39,7 +39,7 @@ export default function BurgerConstructor({ ingredients = [] }) {
                     htmlType="button"
                     type="primary"
                     size="large"
-                    onClick={toggleModal}
+                    onClick={openModal}
                 >
                     Оформить заказ
                 </Button>

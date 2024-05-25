@@ -36,7 +36,7 @@ export default function IngredientDetails({ ingredient }) {
             <img
                 className="mb-4"
                 src={ingredient.image_large}
-                alt="Ингредиент"
+                alt={`${ingredient.name}.`}
             />
             <p className="text text_type_main-medium mb-8">{ingredient.name}</p>
 

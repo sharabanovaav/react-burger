@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import AppHeader from './components/app-header/app-header'
-import BurgerIngredients from './components/burger-ingredients/burger-ingredients'
-import BurgerConstructor from './components/burger-constructor/burger-constructor'
+import AppHeader from '../app-header/app-header'
+import BurgerIngredients from '../burger-ingredients/burger-ingredients'
+import BurgerConstructor from '../burger-constructor/burger-constructor'
 import styles from './app.module.css'
 
 export default function App() {
@@ -12,6 +12,11 @@ export default function App() {
         const getIngredients = async () => {
             try {
                 const res = await fetch(url)
+
+                if (!res.ok) {
+                    throw new Error(`Ошибка ${res.status}`)
+                }
+
                 const { data, success } = await res.json()
 
                 if (success) {

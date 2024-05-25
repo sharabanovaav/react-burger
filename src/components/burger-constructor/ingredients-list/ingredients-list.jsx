@@ -14,7 +14,7 @@ export default function IngredientsList({ bun, ingredients = [] }) {
                     <ConstructorElement
                         type="top"
                         isLocked
-                        text={bun.name}
+                        text={`${bun.name} (верх)`}
                         price={bun.price}
                         thumbnail={bun.image}
                     />
@@ -41,7 +41,7 @@ export default function IngredientsList({ bun, ingredients = [] }) {
                     <ConstructorElement
                         type="bottom"
                         isLocked
-                        text={bun.name}
+                        text={`${bun.name} (низ)`}
                         price={bun.price}
                         thumbnail={bun.image}
                     />
