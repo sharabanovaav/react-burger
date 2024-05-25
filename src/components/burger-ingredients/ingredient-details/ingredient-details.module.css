@@ -1,0 +1,11 @@
+.content,
+.nutrition {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nutritions {
+    display: flex;
+    column-gap: 20px;
+}

@@ -1,0 +1,12 @@
+.main {
+    display: grid;
+    grid-template-columns: 600px 600px;
+    max-width: 1240px;
+    margin: auto;
+    gap: 40px;
+    justify-content: center;
+}
+
+.section {
+    width: 600px;
+}
