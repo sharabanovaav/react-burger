@@ -2,15 +2,16 @@ import {
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
-import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
 import useModal from '../../hooks/use-modal'
 
-export default function BurgerConstructor({ ingredients = [] }) {
+export default function BurgerConstructor() {
+    const { ingredients } = useSelector((state) => state.ingredients)
+
     const { isModalOpen, openModal, closeModal } = useModal()
 
     const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
@@ -48,8 +49,4 @@ export default function BurgerConstructor({ ingredients = [] }) {
             {isModalOpen && renderModal()}
         </section>
     )
-}
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropTypes),
 }

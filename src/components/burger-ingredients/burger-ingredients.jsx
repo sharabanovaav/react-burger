@@ -1,9 +1,8 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
-import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 import useModal from '../../hooks/use-modal'
 import Modal from '../modal/modal'
 import IngredientDetails from './ingredient-details/ingredient-details'
@@ -23,7 +22,9 @@ const ingredientTypes = [
     },
 ]
 
-export default function BurgerIngredients({ ingredients = [] }) {
+export default function BurgerIngredients() {
+    const { ingredients } = useSelector((state) => state.ingredients)
+
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
     const [activeIngredient, setActiveIngredient] = useState(null)
 
@@ -101,8 +102,4 @@ export default function BurgerIngredients({ ingredients = [] }) {
             {isModalOpen && activeIngredient && renderModal()}
         </section>
     )
-}
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropTypes),
 }
