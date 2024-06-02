@@ -3,11 +3,15 @@ import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
-import useModal from '../../hooks/use-modal'
 import Modal from '../modal/modal'
 import IngredientDetails from './ingredient-details/ingredient-details'
 import { loadIngredients } from '../../services/ingredients/actions'
 import { getIngredients } from '../../services/ingredients/reducer'
+import {
+    getDetails,
+    deleteDetails,
+    setDetails,
+} from '../../services/ingredient-details/reducer'
 
 const ingredientTypes = [
     {
@@ -26,12 +30,11 @@ const ingredientTypes = [
 
 export default function BurgerIngredients() {
     const ingredients = useSelector(getIngredients)
+    const ingredientDetails = useSelector(getDetails)
+
     const dispatch = useDispatch()
 
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
-    const [activeIngredient, setActiveIngredient] = useState(null)
-
-    const { isModalOpen, openModal, closeModal } = useModal()
 
     const tabsRef = useRef(null)
     const titlesRefs = useRef([])
@@ -50,13 +53,7 @@ export default function BurgerIngredients() {
     }, {})
 
     const showIngredientDetails = (ingredient) => {
-        setActiveIngredient(ingredient)
-        openModal()
-    }
-
-    const handleModalClose = () => {
-        setActiveIngredient(null)
-        closeModal()
+        dispatch(setDetails(ingredient))
     }
 
     const scrollHandler = () => {
@@ -79,8 +76,11 @@ export default function BurgerIngredients() {
     }
 
     const renderModal = () => (
-        <Modal title="Детали ингредиента" onClose={handleModalClose}>
-            <IngredientDetails ingredient={activeIngredient} />
+        <Modal
+            title="Детали ингредиента"
+            onClose={() => dispatch(deleteDetails())}
+        >
+            <IngredientDetails ingredient={ingredientDetails} />
         </Modal>
     )
 
@@ -138,7 +138,7 @@ export default function BurgerIngredients() {
                 </div>
             )}
 
-            {isModalOpen && activeIngredient && renderModal()}
+            {ingredientDetails && renderModal()}
         </section>
     )
 }
