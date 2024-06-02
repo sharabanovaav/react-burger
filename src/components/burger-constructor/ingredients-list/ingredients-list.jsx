@@ -2,11 +2,23 @@ import {
     ConstructorElement,
     DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
+import { useSelector, useDispatch } from 'react-redux'
 import styles from './ingredients-list.module.css'
-import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
+import {
+    deleteIngredient,
+    getIngredients,
+    getBun,
+} from '../../../services/burger-constructor/reducer'
 
-export default function IngredientsList({ bun, ingredients = [] }) {
+export default function IngredientsList() {
+    const ingredients = useSelector(getIngredients)
+    const bun = useSelector(getBun)
+    const dispatch = useDispatch()
+
+    const deleteHandler = (customId) => {
+        dispatch(deleteIngredient(customId))
+    }
+
     return (
         <div className={styles.wrapper}>
             {bun && (
@@ -23,13 +35,14 @@ export default function IngredientsList({ bun, ingredients = [] }) {
 
             {ingredients.length > 0 && (
                 <div className={`${styles.fillings} custom-scroll`}>
-                    {ingredients.map(({ name, image, price, _id }) => (
-                        <div className={styles.filling} key={_id}>
+                    {ingredients.map(({ name, image, price, customId }) => (
+                        <div className={styles.filling} key={customId}>
                             <DragIcon type="primary" />
                             <ConstructorElement
                                 text={name}
                                 price={price}
                                 thumbnail={image}
+                                handleClose={() => deleteHandler(customId)}
                             />
                         </div>
                     ))}
@@ -49,9 +62,4 @@ export default function IngredientsList({ bun, ingredients = [] }) {
             )}
         </div>
     )
-}
-
-IngredientsList.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropTypes),
-    bun: ingredientPropTypes,
 }

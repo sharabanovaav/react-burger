@@ -5,4 +5,5 @@ export default PropTypes.shape({
     image: PropTypes.string.isRequired,
     image_large: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    customId: PropTypes.string
 })
