@@ -1,5 +1,7 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
+const BUNS_QUANTITY = 2
+
 const initialState = {
     bun: null,
     ingredients: [],
@@ -11,6 +13,14 @@ export const burgerConstructorSlice = createSlice({
     selectors: {
         getIngredients: (state) => state.ingredients,
         getBun: (state) => state.bun,
+        getTotalPrice: (state) => {
+            const bunsPrice = state.bun ? state.bun.price * BUNS_QUANTITY : 0
+
+            return state.ingredients.reduce(
+                (sum, { price }) => sum + price,
+                bunsPrice
+            )
+        },
     },
     reducers: {
         setBun(state, action) {
@@ -30,6 +40,7 @@ export const burgerConstructorSlice = createSlice({
     },
 })
 
-export const { getIngredients, getBun } = burgerConstructorSlice.selectors
+export const { getIngredients, getBun, getTotalPrice } =
+    burgerConstructorSlice.selectors
 export const { setBun, addIngredient, deleteIngredient } =
     burgerConstructorSlice.actions
