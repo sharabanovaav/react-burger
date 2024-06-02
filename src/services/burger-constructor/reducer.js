@@ -1,6 +1,6 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
-const BUNS_QUANTITY = 2
+export const BUNS_QUANTITY = 2
 
 const initialState = {
     bun: null,

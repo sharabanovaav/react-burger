@@ -1,5 +1,5 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
@@ -8,8 +8,11 @@ import IngredientDetails from './ingredient-details/ingredient-details'
 import { loadIngredients } from '../../services/ingredients/actions'
 import { getIngredients } from '../../services/ingredients/reducer'
 import {
+    getBun,
     setBun,
     addIngredient,
+    getIngredients as getConstructorIngredients,
+    BUNS_QUANTITY,
 } from '../../services/burger-constructor/reducer'
 
 import {
@@ -39,6 +42,9 @@ export default function BurgerIngredients() {
     const ingredients = useSelector(getIngredients)
     const ingredientDetails = useSelector(getDetails)
 
+    const constructorIngredients = useSelector(getConstructorIngredients)
+    const bun = useSelector(getBun)
+
     const dispatch = useDispatch()
 
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
@@ -50,14 +56,33 @@ export default function BurgerIngredients() {
         dispatch(loadIngredients())
     }, [])
 
-    const ingredientsDict = ingredients.reduce((dict, ingredient) => {
-        if (!dict[ingredient.type]) {
-            dict[ingredient.type] = []
+    const ingredientsCountDict = useMemo(() => {
+        const countsDict = {}
+
+        if (bun) {
+            countsDict[bun._id] = BUNS_QUANTITY
         }
 
-        dict[ingredient.type].push(ingredient)
-        return dict
-    }, {})
+        return constructorIngredients.reduce((dict, ingredient) => {
+            dict[ingredient._id] = dict[ingredient._id]
+                ? dict[ingredient._id] + 1
+                : 1
+            return dict
+        }, countsDict)
+    }, [bun, constructorIngredients])
+
+    const ingredientsDict = useMemo(
+        () =>
+            ingredients.reduce((dict, ingredient) => {
+                if (!dict[ingredient.type]) {
+                    dict[ingredient.type] = []
+                }
+
+                dict[ingredient.type].push(ingredient)
+                return dict
+            }, {}),
+        [ingredients]
+    )
 
     const showIngredientDetails = (ingredient) => {
         dispatch(setDetails(ingredient))
@@ -126,7 +151,7 @@ export default function BurgerIngredients() {
                     <IngredientCard
                         key={ingredient._id}
                         ingredient={ingredient}
-                        count={1}
+                        count={ingredientsCountDict[ingredient._id]}
                         onClick={() => ingredientClickHandler(ingredient)}
                     />
                 ))}
