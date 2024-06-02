@@ -1,11 +1,13 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
 import useModal from '../../hooks/use-modal'
 import Modal from '../modal/modal'
 import IngredientDetails from './ingredient-details/ingredient-details'
+import { loadIngredients } from '../../services/ingredients/actions'
+import { getIngredients } from '../../services/ingredients/reducer'
 
 const ingredientTypes = [
     {
@@ -23,7 +25,12 @@ const ingredientTypes = [
 ]
 
 export default function BurgerIngredients() {
-    const { ingredients } = useSelector((state) => state.ingredients)
+    const ingredients = useSelector(getIngredients)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(loadIngredients())
+    }, [])
 
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
     const [activeIngredient, setActiveIngredient] = useState(null)

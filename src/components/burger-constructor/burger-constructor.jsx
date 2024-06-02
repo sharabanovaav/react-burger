@@ -8,17 +8,16 @@ import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
 import useModal from '../../hooks/use-modal'
+import {
+    getIngredients,
+    getBun,
+} from '../../services/burger-constructor/reducer'
 
 export default function BurgerConstructor() {
-    const { ingredients } = useSelector((state) => state.ingredients)
+    const ingredients = useSelector(getIngredients)
+    const bun = useSelector(getBun)
 
     const { isModalOpen, openModal, closeModal } = useModal()
-
-    const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
-
-    const selectedIngredients = ingredients.filter(
-        (ingredient) => ingredient.type !== 'bun'
-    )
 
     const renderModal = () => (
         <Modal onClose={closeModal}>
@@ -28,7 +27,7 @@ export default function BurgerConstructor() {
 
     return (
         <section className="p-25 pl-4 pr-4">
-            <IngredientsList ingredients={selectedIngredients} bun={bun} />
+            <IngredientsList ingredients={ingredients} bun={bun} />
 
             <div className={`${styles.footer} mt-10`}>
                 <div className={styles.price}>
