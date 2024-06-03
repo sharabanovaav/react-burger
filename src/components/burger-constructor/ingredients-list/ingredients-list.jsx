@@ -1,7 +1,4 @@
-import {
-    ConstructorElement,
-    DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components'
+import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { useDrop } from 'react-dnd'
 import { useState } from 'react'
@@ -12,9 +9,11 @@ import {
     getBun,
     setBun,
     addIngredient,
+    setIngredients,
 } from '../../../services/burger-constructor/reducer'
 import IngredientStub from '../ingredient-stub/ingredient-stub'
 import { BUN_TYPE, INGREDIENT_TYPE } from '../../../consts/index.ts'
+import DraggableIngredient from '../draggable-ingredient/draggable-ingredient'
 
 export default function IngredientsList() {
     const ingredients = useSelector(getIngredients)
@@ -45,6 +44,16 @@ export default function IngredientsList() {
         dispatch(deleteIngredient(customId))
     }
 
+    const moveHandler = (fromIndex, toIndex) => {
+        const dragCard = ingredients[fromIndex]
+        const newIngredients = [...ingredients]
+
+        newIngredients.splice(fromIndex, 1)
+        newIngredients.splice(toIndex, 0, dragCard)
+
+        dispatch(setIngredients(newIngredients))
+    }
+
     const renderBun = (type, comment) => (
         <div className="ml-8">
             {bun ? (
@@ -71,16 +80,14 @@ export default function IngredientsList() {
 
             {ingredients.length > 0 ? (
                 <div className={`${styles.fillings} custom-scroll`}>
-                    {ingredients.map(({ name, image, price, customId }) => (
-                        <div className={styles.filling} key={customId}>
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                                text={name}
-                                price={price}
-                                thumbnail={image}
-                                handleClose={() => deleteHandler(customId)}
-                            />
-                        </div>
+                    {ingredients.map((ingredient, index) => (
+                        <DraggableIngredient
+                            key={ingredient.customId}
+                            index={index}
+                            ingredient={ingredient}
+                            onDelete={deleteHandler}
+                            onMove={moveHandler}
+                        />
                     ))}
                 </div>
             ) : (

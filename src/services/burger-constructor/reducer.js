@@ -26,6 +26,9 @@ export const burgerConstructorSlice = createSlice({
         setBun(state, action) {
             state.bun = action.payload
         },
+        setIngredients(state, action) {
+            state.ingredients = action.payload
+        },
         addIngredient(state, action) {
             state.ingredients.push({
                 ...action.payload,
@@ -42,5 +45,10 @@ export const burgerConstructorSlice = createSlice({
 
 export const { getIngredients, getBun, getTotalPrice } =
     burgerConstructorSlice.selectors
-export const { setBun, addIngredient, deleteIngredient, reset } =
-    burgerConstructorSlice.actions
+export const {
+    setBun,
+    setIngredients,
+    addIngredient,
+    deleteIngredient,
+    reset,
+} = burgerConstructorSlice.actions

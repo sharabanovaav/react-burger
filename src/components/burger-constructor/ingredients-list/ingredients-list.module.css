@@ -12,12 +12,6 @@
     max-height: calc(100vh - 624px);
 }
 
-.filling {
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-}
-
 .element {
     max-width: 520px;
 }
