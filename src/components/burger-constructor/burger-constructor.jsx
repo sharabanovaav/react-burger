@@ -67,7 +67,7 @@ export default function BurgerConstructor() {
                     htmlType="button"
                     type="primary"
                     size="large"
-                    disabled={!bun && !ingredients.length}
+                    disabled={!bun || !ingredients.length}
                     onClick={submitOrder}
                 >
                     Оформить заказ
