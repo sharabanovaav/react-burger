@@ -9,12 +9,9 @@ import { loadIngredients } from '../../services/ingredients/actions'
 import { getIngredients } from '../../services/ingredients/reducer'
 import {
     getBun,
-    setBun,
-    addIngredient,
     getIngredients as getConstructorIngredients,
-    BUNS_QUANTITY,
 } from '../../services/burger-constructor/reducer'
-
+import { BUNS_QUANTITY } from '../../consts/index.ts'
 import {
     getDetails,
     deleteDetails,
@@ -35,8 +32,6 @@ const ingredientTypes = [
         type: 'main',
     },
 ]
-
-const BUN_TYPE = 'bun'
 
 export default function BurgerIngredients() {
     const ingredients = useSelector(getIngredients)
@@ -107,16 +102,6 @@ export default function BurgerIngredients() {
         titlesRefs.current[index].scrollIntoView({ behavior: 'smooth' })
     }
 
-    const ingredientClickHandler = (ingredient) => {
-        showIngredientDetails(ingredient)
-
-        if (ingredient.type === BUN_TYPE) {
-            dispatch(setBun(ingredient))
-        } else {
-            dispatch(addIngredient(ingredient))
-        }
-    }
-
     const renderModal = () => (
         <Modal
             title="Детали ингредиента"
@@ -152,7 +137,7 @@ export default function BurgerIngredients() {
                         key={ingredient._id}
                         ingredient={ingredient}
                         count={ingredientsCountDict[ingredient._id]}
-                        onClick={() => ingredientClickHandler(ingredient)}
+                        onClick={() => showIngredientDetails(ingredient)}
                     />
                 ))}
             </div>

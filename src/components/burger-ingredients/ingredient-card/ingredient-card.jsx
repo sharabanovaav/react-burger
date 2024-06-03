@@ -4,12 +4,26 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
 
+import { useDrag } from 'react-dnd'
 import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 import styles from './ingredient-card.module.css'
 
 export default function IngredientCard({ ingredient, count = 0, onClick }) {
+    const [{ opacity }, dragRef] = useDrag({
+        type: 'ingredient',
+        item: ingredient,
+        collect: (monitor) => ({
+            opacity: monitor.isDragging() ? 0.3 : 1,
+        }),
+    })
+
     return (
-        <div className={styles.card} onClick={onClick}>
+        <div
+            className={styles.card}
+            onClick={onClick}
+            ref={dragRef}
+            style={{ opacity }}
+        >
             {count > 0 && (
                 <Counter
                     className={styles.counter}

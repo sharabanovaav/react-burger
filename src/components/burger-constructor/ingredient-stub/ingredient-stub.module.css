@@ -25,3 +25,7 @@
 .stub_bottom {
     border-radius: var(--bottom-constructor-item-border-radius);
 }
+
+.hovered {
+    border: 4px dashed blue;
+}
