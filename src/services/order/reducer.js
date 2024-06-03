@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-// import { loadIngredients } from './actions'
+import { createOrder } from './actions'
 
 const initialState = {
-    order: null,
+    orderId: null,
     loading: false,
     error: null,
 }
@@ -11,23 +11,28 @@ export const orderSlice = createSlice({
     name: 'order',
     initialState,
     selectors: {
-        getOrder: (state) => state.order,
+        getOrderId: (state) => state.orderId,
+        getLoading: (state) => state.loading,
     },
-    // extraReducers: (builder) => {
-    // builder
-    // .addCase(loadIngredients.fulfilled, (state, action) => {
-    //     state.loading = false
-    //     state.ingredients = action.payload
-    // })
-    // .addCase(loadIngredients.pending, (state) => {
-    //     state.loading = true
-    //     state.error = null
-    // })
-    // .addCase(loadIngredients.rejected, (state, action) => {
-    //     state.loading = false
-    //     state.error = action.payload
-    // })
-    // },
+    reducers: {
+        reset: () => initialState,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(createOrder.fulfilled, (state, action) => {
+                state.loading = false
+                state.orderId = action.payload
+            })
+            .addCase(createOrder.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(createOrder.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+    },
 })
 
-export const { getOrder } = orderSlice.selectors
+export const { getOrderId, getLoading } = orderSlice.selectors
+export const { reset } = orderSlice.actions

@@ -23,6 +23,7 @@ export const burgerConstructorSlice = createSlice({
         },
     },
     reducers: {
+        reset: () => initialState,
         setBun(state, action) {
             state.bun = action.payload
         },
@@ -42,5 +43,5 @@ export const burgerConstructorSlice = createSlice({
 
 export const { getIngredients, getBun, getTotalPrice } =
     burgerConstructorSlice.selectors
-export const { setBun, addIngredient, deleteIngredient } =
+export const { setBun, addIngredient, deleteIngredient, reset } =
     burgerConstructorSlice.actions

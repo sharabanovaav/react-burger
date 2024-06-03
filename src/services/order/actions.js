@@ -1,15 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { getIngredients } from '../../utils/norma-api'
+import { makeOrder } from '../../utils/norma-api'
 
 /* eslint-disable */
-// export const loadIngredients = createAsyncThunk(
-//     'ingredients/loadIngredients',
-//     async (_, thunkAPI) => {
-//         try {
-//             const { data } = await getIngredients()
-//             return data
-//         } catch (error) {
-//             thunkAPI.rejectWithValue(error.message)
-//         }
-//     }
-// )
+export const createOrder = createAsyncThunk(
+    'order/makeOrder',
+    async (request, thunkAPI) => {
+        try {
+            const {
+                order: { number },
+            } = await makeOrder(request)
+
+            return number
+        } catch (error) {
+            thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
