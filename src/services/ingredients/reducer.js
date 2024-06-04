@@ -27,7 +27,6 @@ export const ingredientsSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
                 state.ingredients = []
-
             })
     },
 })

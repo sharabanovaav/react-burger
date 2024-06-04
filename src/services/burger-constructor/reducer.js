@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { BUNS_QUANTITY } from '../../consts/index.ts'
 
 const initialState = {
@@ -30,10 +30,7 @@ export const burgerConstructorSlice = createSlice({
             state.ingredients = action.payload
         },
         addIngredient(state, action) {
-            state.ingredients.push({
-                ...action.payload,
-                customId: nanoid(),
-            })
+            state.ingredients.push(action.payload)
         },
         deleteIngredient(state, action) {
             state.ingredients = state.ingredients.filter(

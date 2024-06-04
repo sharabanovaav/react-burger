@@ -5,9 +5,9 @@ const apiConfig = {
 const getResponse = (res) => {
     if (res.ok) {
         return res.json()
-    }
-
-    return Promise.reject(`Ошибка ${res.status}`)
+    } 
+    
+    throw new Error(`Ошибка ${res.status}`)
 }
 
 export const getIngredients = () =>
