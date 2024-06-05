@@ -2,36 +2,64 @@ import {
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { useMemo } from 'react'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
-import ingredientPropTypes from '../../consts/ingredient-prop-types.ts'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
 import useModal from '../../hooks/use-modal'
+import {
+    getTotalPrice,
+    getIngredients,
+    getBun,
+    reset as resetConstructor,
+} from '../../services/burger-constructor/reducer'
+import { createOrder } from '../../services/order/actions'
+import { reset } from '../../services/order/reducer'
 
-export default function BurgerConstructor({ ingredients = [] }) {
+export default function BurgerConstructor() {
+    const totalPrice = useSelector(getTotalPrice)
+    const bun = useSelector(getBun)
+    const ingredients = useSelector(getIngredients)
+
+    const dispatch = useDispatch()
+
     const { isModalOpen, openModal, closeModal } = useModal()
 
-    const bun = ingredients.find((ingredient) => ingredient.type === 'bun')
+    const orderRequest = useMemo(() => {
+        const bunId = bun?._id
+        const ingredientsIds = ingredients.map(({ _id }) => `${_id}`)
 
-    const selectedIngredients = ingredients.filter(
-        (ingredient) => ingredient.type !== 'bun'
-    )
+        return [bunId, ...ingredientsIds, bunId]
+    }, [bun, ingredients])
+
+    const submitOrder = () => {
+        dispatch(createOrder(orderRequest))
+        openModal()
+    }
+
+    const closeModalHandler = () => {
+        closeModal()
+        dispatch(reset())
+        dispatch(resetConstructor())
+    }
 
     const renderModal = () => (
-        <Modal onClose={closeModal}>
+        <Modal onClose={closeModalHandler}>
             <OrderDetails />
         </Modal>
     )
 
     return (
         <section className="p-25 pl-4 pr-4">
-            <IngredientsList ingredients={selectedIngredients} bun={bun} />
+            <IngredientsList />
 
             <div className={`${styles.footer} mt-10`}>
                 <div className={styles.price}>
-                    <span className="text text_type_digits-medium">610</span>
+                    <span className="text text_type_digits-medium">
+                        {totalPrice}
+                    </span>
                     <CurrencyIcon type="primary" />
                 </div>
 
@@ -39,7 +67,8 @@ export default function BurgerConstructor({ ingredients = [] }) {
                     htmlType="button"
                     type="primary"
                     size="large"
-                    onClick={openModal}
+                    disabled={!bun || !ingredients.length}
+                    onClick={submitOrder}
                 >
                     Оформить заказ
                 </Button>
@@ -48,8 +77,4 @@ export default function BurgerConstructor({ ingredients = [] }) {
             {isModalOpen && renderModal()}
         </section>
     )
-}
-
-BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropTypes),
 }

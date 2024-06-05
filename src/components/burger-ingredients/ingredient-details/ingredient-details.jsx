@@ -1,5 +1,6 @@
+import { useSelector } from 'react-redux'
 import styles from './ingredient-details.module.css'
-import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
+import { getDetails } from '../../../services/ingredient-details/reducer'
 
 const nutritions = [
     {
@@ -20,7 +21,9 @@ const nutritions = [
     },
 ]
 
-export default function IngredientDetails({ ingredient }) {
+export default function IngredientDetails() {
+    const details = useSelector(getDetails)
+
     const renderNutrition = (name, value) => (
         <div key={name} className={styles.nutrition}>
             <span className="text text_type_main-default text_color_inactive">
@@ -35,20 +38,16 @@ export default function IngredientDetails({ ingredient }) {
         <section className={`${styles.content} mt-20`}>
             <img
                 className="mb-4"
-                src={ingredient.image_large}
-                alt={`${ingredient.name}.`}
+                src={details.image_large}
+                alt={`${details.name}.`}
             />
-            <p className="text text_type_main-medium mb-8">{ingredient.name}</p>
+            <p className="text text_type_main-medium mb-8">{details.name}</p>
 
             <div className={styles.nutritions}>
                 {nutritions.map(({ name, key }) =>
-                    renderNutrition(name, ingredient[key])
+                    renderNutrition(name, details[key])
                 )}
             </div>
         </section>
     )
-}
-
-IngredientDetails.propTypes = {
-    ingredient: ingredientPropTypes.isRequired,
 }
