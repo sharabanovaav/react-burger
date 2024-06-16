@@ -1,22 +1,18 @@
 import { Link } from 'react-router-dom'
-
+import '../../css/common-styles.css'
 import styles from './not-found.module.css'
 
 export function NotFound() {
     return (
-        <div className={styles.wrapper}>
-            <div className="mt-20">
-                <h1 className="text text_type_digits-large">404</h1>
-                <p className="text text_type_main-medium">
-                    Страницы не существует
-                </p>
-                <p className="text text_type_main-default">
-                    проверьте адрес или перейдите на{' '}
-                    <Link to="/" className={styles.link}>
-                        главную
-                    </Link>
-                </p>
-            </div>
+        <div className={`${styles.wrapper} mt-20`}>
+            <h1 className="text text_type_digits-large">404</h1>
+            <p className="text text_type_main-medium">Страницы не существует</p>
+            <p className="text text_type_main-default">
+                проверьте адрес или перейдите на{' '}
+                <Link to="/" className="link">
+                    главную
+                </Link>
+            </p>
         </div>
     )
 }
