@@ -2,14 +2,23 @@ import {
     Button,
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { getResetToken } from '../../utils/norma-api'
 
 export function ForgotPassword() {
     const [email, setEmail] = useState('')
 
-    function handleSubmit(event) {
+    const navigate = useNavigate()
+
+    async function handleSubmit(event) {
         event.preventDefault()
+
+        const { success } = await getResetToken()
+
+        if (success) {
+            navigate('/reset-password')
+        }
     }
 
     return (
@@ -29,7 +38,12 @@ export function ForgotPassword() {
                 </div>
 
                 <div className="mb-20">
-                    <Button htmlType="submit" type="primary" size="medium">
+                    <Button
+                        htmlType="submit"
+                        type="primary"
+                        size="medium"
+                        disabled={!email}
+                    >
                         Восстановить
                     </Button>
                 </div>

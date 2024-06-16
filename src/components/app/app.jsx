@@ -8,9 +8,11 @@ import {
     Register,
     ForgotPassword,
     ResetPassword,
+    Profile,
 } from '../../pages'
 
 import IngredientDetails from '../burger-ingredients/ingredient-details/ingredient-details'
+import { ProfileData } from '../profile/profile-data/profile-data'
 
 export default function App() {
     const location = useLocation()
@@ -31,11 +33,13 @@ export default function App() {
                     path="/ingredients/:id"
                     element={<IngredientDetails />}
                 />
-                <Route path="*" element={<NotFound />} />
 
-                {/* 
-                    /profile — страница с настройками профиля пользователя.
-                 */}
+                <Route path="/profile" element={<Profile />}>
+                    <Route index element={<ProfileData />} />
+                    <Route path="orders" element={<div />} />
+                </Route>
+
+                <Route path="*" element={<NotFound />} />
             </Routes>
 
             {state?.backgroundLocation && (
