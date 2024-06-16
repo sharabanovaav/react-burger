@@ -1,20 +1,14 @@
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Routes, Route } from 'react-router-dom';
 import AppHeader from '../app-header/app-header'
-import BurgerIngredients from '../burger-ingredients/burger-ingredients'
-import BurgerConstructor from '../burger-constructor/burger-constructor'
-import styles from './app.module.css'
+import { Home } from '../../pages'
 
 export default function App() {
     return (
         <div>
             <AppHeader />
-            <main className={styles.main}>
-                <DndProvider backend={HTML5Backend}>
-                    <BurgerIngredients className={styles.section} />
-                    <BurgerConstructor className={styles.section} />
-                </DndProvider>
-            </main>
+            <Routes>
+                <Route path="/" element={<Home />}/>
+            </Routes>
         </div>
     )
 }
