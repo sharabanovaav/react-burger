@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import '../../css/common-styles.css'
 
-export function Login() {
+export function Register() {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -18,7 +19,16 @@ export function Login() {
     return (
         <main className="page mt-30">
             <form onSubmit={handleSubmit}>
-                <h1 className="text text_type_main-medium mb-6">Вход</h1>
+                <h1 className="text text_type_main-medium mb-6">Регистрация</h1>
+
+                <div className="mb-6">
+                    <Input
+                        placeholder="Имя"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
 
                 <div className="mb-6">
                     <Input
@@ -39,20 +49,14 @@ export function Login() {
 
                 <div className="mb-20">
                     <Button htmlType="submit" type="primary" size="medium">
-                        Войти
+                        Зарегистрироваться
                     </Button>
                 </div>
 
                 <p className="text text_type_main-default text_color_inactive mb-4">
-                    Вы — новый пользователь?{' '}
-                    <Link className="link" to="/register">
-                        Зарегистрироваться
-                    </Link>
-                </p>
-                <p className="text text_type_main-default text_color_inactive">
-                    Забыли пароль?{' '}
-                    <Link className="link" to="/forgot-password">
-                        Восстановить пароль
+                    Уже зарегистрированы?{' '}
+                    <Link className="link" to="/login">
+                        Войти
                     </Link>
                 </p>
             </form>

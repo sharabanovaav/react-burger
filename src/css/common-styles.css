@@ -2,3 +2,10 @@
     text-decoration: none;
     color: #4C4CFF;
 }
+
+.page {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+ 
