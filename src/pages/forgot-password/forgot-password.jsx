@@ -4,7 +4,6 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import '../../css/common-styles.css'
 
 export function ForgotPassword() {
     const [email, setEmail] = useState('')
