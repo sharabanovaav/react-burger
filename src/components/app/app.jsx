@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import AppHeader from '../app-header/app-header'
-import { Home, NotFound, Login, Register } from '../../pages'
+import { Home, NotFound, Login, Register, ForgotPassword } from '../../pages'
 
 export default function App() {
     return (
@@ -10,10 +10,11 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+
                 <Route path="*" element={<NotFound />} />
 
                 {/* 
-                    /forgot-password - страница восстановления пароля.
                     /reset-password - страница сброса пароля.
                     /profile — страница с настройками профиля пользователя.
                     /ingredients/:id — страница ингредиента.
