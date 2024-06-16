@@ -49,7 +49,7 @@ export default function BurgerIngredients() {
 
     useEffect(() => {
         dispatch(loadIngredients())
-    }, [])
+    }, [dispatch])
 
     const ingredientsCountDict = useMemo(() => {
         const countsDict = {}
