@@ -1,22 +1,16 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
-import Modal from '../modal/modal'
-import IngredientDetails from './ingredient-details/ingredient-details'
 import { loadIngredients } from '../../services/ingredients/actions'
-import { getIngredients } from '../../services/ingredients/reducer'
+import { getIngredients, getLoading } from '../../services/ingredients/reducer'
 import {
     getBun,
     getIngredients as getConstructorIngredients,
 } from '../../services/burger-constructor/reducer'
 import { BUNS_QUANTITY } from '../../consts/index.ts'
-import {
-    getDetails,
-    deleteDetails,
-    setDetails,
-} from '../../services/ingredient-details/reducer'
 
 const ingredientTypes = [
     {
@@ -35,21 +29,24 @@ const ingredientTypes = [
 
 export default function BurgerIngredients() {
     const ingredients = useSelector(getIngredients)
-    const ingredientDetails = useSelector(getDetails)
-
+    const loading = useSelector(getLoading)
     const constructorIngredients = useSelector(getConstructorIngredients)
     const bun = useSelector(getBun)
-
-    const dispatch = useDispatch()
 
     const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
 
     const tabsRef = useRef(null)
     const titlesRefs = useRef([])
 
+    const location = useLocation()
+
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        dispatch(loadIngredients())
-    }, [dispatch])
+        if (!ingredients.length && !loading) {
+            dispatch(loadIngredients())
+        }
+    })
 
     const ingredientsCountDict = useMemo(() => {
         const countsDict = {}
@@ -79,10 +76,6 @@ export default function BurgerIngredients() {
         [ingredients]
     )
 
-    const showIngredientDetails = (ingredient) => {
-        dispatch(setDetails(ingredient))
-    }
-
     const scrollHandler = () => {
         const tabsBottom = tabsRef.current.getBoundingClientRect().bottom
 
@@ -101,15 +94,6 @@ export default function BurgerIngredients() {
         setActiveTabType(type)
         titlesRefs.current[index].scrollIntoView({ behavior: 'smooth' })
     }
-
-    const renderModal = () => (
-        <Modal
-            title="Детали ингредиента"
-            onClose={() => dispatch(deleteDetails())}
-        >
-            <IngredientDetails ingredient={ingredientDetails} />
-        </Modal>
-    )
 
     const renderTypeTab = ({ type, name }, index) => (
         <Tab
@@ -133,12 +117,17 @@ export default function BurgerIngredients() {
 
             <div className={`${styles.list} pl-4 pr-4`}>
                 {ingredientsDict[type].map((ingredient) => (
-                    <IngredientCard
+                    <Link
+                        style={{ color: 'inherit', textDecoration: 'inherit' }}
                         key={ingredient._id}
-                        ingredient={ingredient}
-                        count={ingredientsCountDict[ingredient._id]}
-                        onClick={() => showIngredientDetails(ingredient)}
-                    />
+                        to={`/ingredients/${ingredient._id}`}
+                        state={{ backgroundLocation: location }}
+                    >
+                        <IngredientCard
+                            ingredient={ingredient}
+                            count={ingredientsCountDict[ingredient._id]}
+                        />
+                    </Link>
                 ))}
             </div>
         </div>
@@ -164,8 +153,6 @@ export default function BurgerIngredients() {
                     {ingredientTypes.map(renderIngredients)}
                 </div>
             )}
-
-            {ingredientDetails && renderModal()}
         </section>
     )
 }
