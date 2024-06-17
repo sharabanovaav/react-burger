@@ -4,14 +4,25 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
+import { login } from '../../services/user/actions'
 
 export function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const dispatch = useDispatch()
+
     function handleSubmit(event) {
         event.preventDefault()
+
+        dispatch(
+            login({
+                email,
+                password,
+            })
+        )
     }
 
     return (

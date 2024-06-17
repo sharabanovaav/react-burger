@@ -5,14 +5,26 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { registerUser } from '../../services/user/actions'
 
 export function Register() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const dispatch = useDispatch()
+
     function handleSubmit(event) {
         event.preventDefault()
+
+        dispatch(
+            registerUser({
+                name,
+                email,
+                password,
+            })
+        )
     }
 
     return (

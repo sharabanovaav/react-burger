@@ -1,13 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { makeOrder } from '../../utils/norma-api'
+import { api } from '../../utils/api'
 
-/* eslint-disable */
 export const createOrder = createAsyncThunk(
     'order/makeOrder',
     async (request) => {
-         const {
+        const {
             order: { number },
-        } = await makeOrder(request)
+        } = await api.makeOrder(request)
 
         return number
     }

@@ -4,7 +4,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { getResetToken } from '../../utils/norma-api'
+import { api } from '../../utils/api'
 
 export function ForgotPassword() {
     const [email, setEmail] = useState('')
@@ -14,7 +14,7 @@ export function ForgotPassword() {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        const { success } = await getResetToken()
+        const { success } = await api.getResetToken()
 
         if (success) {
             navigate('/reset-password')
