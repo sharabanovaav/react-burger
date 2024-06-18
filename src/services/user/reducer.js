@@ -4,6 +4,7 @@ import {
     logout,
     getUser as getUserAction,
     registerUser,
+    updateUser,
 } from './actions'
 
 const initialState = {
@@ -40,6 +41,9 @@ export const userSlice = createSlice({
                 state.isAuthChecked = true
             })
             .addCase(registerUser.fulfilled, (state, action) => {
+                state.user = action.payload
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
                 state.user = action.payload
             })
     },

@@ -14,3 +14,7 @@ export const logout = createAsyncThunk('user/logout', (request) =>
 export const registerUser = createAsyncThunk('user/registerUser', (request) =>
     api.registerUser(request)
 )
+
+export const updateUser = createAsyncThunk('user/updateUser', (request) =>
+    api.updateUser(request)
+)

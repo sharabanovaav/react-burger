@@ -1,8 +1,12 @@
+import { useDispatch } from 'react-redux'
 import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './profile.module.css'
+import { logout } from '../../services/user/actions'
 
 export function Profile() {
     const location = useLocation()
+    const dispatch = useDispatch()
     const { pathname } = location
 
     const getCaption = () => {
@@ -22,6 +26,10 @@ export function Profile() {
         return `${styles.link} text text_type_main-medium pt-4 pb-4 ${activeClass}`
     }
 
+    const handleLogout = () => {
+        dispatch(logout())
+    }
+
     return (
         <main className={`${styles.wrapper} mt-30`}>
             <section>
@@ -38,9 +46,13 @@ export function Profile() {
                     >
                         История заказов
                     </NavLink>
-                    <NavLink to="/" className={() => getLinkClassName('/')}>
+                    <Button
+                        className={`${styles.button} text text_type_main-medium text_color_inactive pt-4 pb-4`}
+                        type="secondary"
+                        onClick={() => handleLogout()}
+                    >
                         Выход
-                    </NavLink>
+                    </Button>
                 </nav>
 
                 <p
