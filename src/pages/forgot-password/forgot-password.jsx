@@ -14,7 +14,7 @@ export function ForgotPassword() {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        const { success } = await api.getResetToken()
+        const { success } = await api.getResetToken(email)
 
         if (success) {
             navigate('/reset-password')

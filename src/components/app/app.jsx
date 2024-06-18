@@ -1,8 +1,11 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import AppHeader from '../app-header/app-header'
-import { setIsAuthChecked } from '../../services/user/reducer'
+import {
+    setIsAuthChecked,
+    getUser as getUserSelector,
+} from '../../services/user/reducer'
 import { getUser } from '../../services/user/actions'
 
 import Modal from '../modal/modal'
@@ -21,6 +24,7 @@ import { ProfileData } from '../profile/profile-data/profile-data'
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route'
 
 export default function App() {
+    const user = useSelector(getUserSelector)
     const dispatch = useDispatch()
     const location = useLocation()
     const navigate = useNavigate()
@@ -29,7 +33,9 @@ export default function App() {
 
     useEffect(() => {
         if (localStorage.getItem('accessToken')) {
-            dispatch(getUser())
+            if (!user) {
+                dispatch(getUser())
+            }
         } else {
             dispatch(setIsAuthChecked(true))
         }

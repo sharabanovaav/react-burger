@@ -2,9 +2,13 @@ const apiConfig = {
     baseUrl: 'https://norma.nomoreparties.space/api',
 }
 
-const getResponse = (res) => {
+const getResponse = async (res) => {
     if (res.ok) {
         return res.json()
+    }
+
+    if (res.status === 403) {
+        return Promise.reject(res)
     }
 
     throw new Error(`Ошибка ${res.status}`)
@@ -61,9 +65,8 @@ const registerUser = ({ email, password, name }) =>
     })
         .then(getResponse)
         .then(({ accessToken, refreshToken, user }) => {
-            // TODO: FIXME:
-            console.log('refreshToken', refreshToken)
             localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('refreshToken', refreshToken)
 
             return user
         })
@@ -81,46 +84,43 @@ const login = ({ email, password }) =>
     })
         .then(getResponse)
         .then(({ accessToken, refreshToken, user }) => {
-            // TODO: FIXME:
-            console.log('refreshToken', refreshToken)
             localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('refreshToken', refreshToken)
 
             return user
         })
 
-const refreshToken = (
-    { token } // "значение refreshToken"
-) =>
+const getRefreshToken = () =>
     fetch(`${apiConfig.baseUrl}/auth/token`, {
         headers: {
             'Content-Type': 'application/json',
         },
         method: 'POST',
         body: JSON.stringify({
-            token,
+            token: localStorage.getItem('refreshToken'),
         }),
-    }).then(getResponse)
-// auth/token
-// "success": true,
-//   "accessToken": "Bearer ...",
-//   "refreshToken": ""
+    })
+        .then(getResponse)
+        .then(({ accessToken, refreshToken }) => {
+            localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('refreshToken', refreshToken)
+        })
 
-const logout = (
-    { token } // "значение refreshToken"
-) =>
+const logout = () =>
     fetch(`${apiConfig.baseUrl}/auth/logout`, {
         headers: {
             'Content-Type': 'application/json',
         },
         method: 'POST',
         body: JSON.stringify({
-            token,
+            token: localStorage.getItem('refreshToken'),
         }),
-    }).then(getResponse)
-// {
-//     "success": true,
-//     "message": "Successful logout"
-//   }
+    })
+        .then(getResponse)
+        .then(() => {
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('refreshToken')
+        })
 
 const getUser = () =>
     fetch(`${apiConfig.baseUrl}/auth/user`, {
@@ -131,9 +131,15 @@ const getUser = () =>
     })
         .then(getResponse)
         .then(({ user }) => user)
+        .catch(async (error) => {
+            if (error.status === 403) {
+                await getRefreshToken()
+                await getUser()
+            }
+        })
 
-const updateUser = ({ email, name }) =>
-    fetch(`${apiConfig.baseUrl}/auth/logout`, {
+const updateUser = ({ email, name, password }) =>
+    fetch(`${apiConfig.baseUrl}/auth/user`, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: localStorage.getItem('accessToken'),
@@ -142,18 +148,14 @@ const updateUser = ({ email, name }) =>
         body: JSON.stringify({
             email,
             name,
+            password,
         }),
-    }).then(getResponse)
-// {
-//     "success": true,
-//     "user": {
-//       "email": "",
-//       "name": ""
-//     }
-//   }
+    })
+        .then(getResponse)
+        .then(({ user }) => user)
 
 export const api = {
-    refreshToken,
+    getRefreshToken,
     getUser,
     updateUser,
     login,

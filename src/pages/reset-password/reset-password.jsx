@@ -3,15 +3,24 @@ import {
     Input,
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { api } from '../../utils/api'
 
 export function ResetPassword() {
-    const [code, setCode] = useState('')
+    const [token, setToken] = useState('')
     const [password, setPassword] = useState('')
 
-    function handleSubmit(event) {
+    const navigate = useNavigate()
+
+    async function handleSubmit(event) {
         event.preventDefault()
+
+        const { success } = await api.resetPassword({ token, password })
+
+        if (success) {
+            navigate('/login')
+        }
     }
 
     return (
@@ -33,13 +42,18 @@ export function ResetPassword() {
                     <Input
                         placeholder="Введите код из письма"
                         type="text"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
+                        value={token}
+                        onChange={(e) => setToken(e.target.value)}
                     />
                 </div>
 
                 <div className="mb-20">
-                    <Button htmlType="submit" type="primary" size="medium">
+                    <Button
+                        htmlType="submit"
+                        type="primary"
+                        size="medium"
+                        disabled={!token || !password}
+                    >
                         Сохранить
                     </Button>
                 </div>
