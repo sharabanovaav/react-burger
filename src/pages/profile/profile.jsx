@@ -48,6 +48,7 @@ export function Profile() {
                     </NavLink>
                     <Button
                         className={`${styles.button} text text_type_main-medium text_color_inactive pt-4 pb-4`}
+                        htmlType="button"
                         type="secondary"
                         onClick={() => handleLogout()}
                     >

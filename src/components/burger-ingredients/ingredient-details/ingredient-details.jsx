@@ -7,6 +7,7 @@ import {
     getLoading,
 } from '../../../services/ingredients/reducer'
 import { loadIngredients } from '../../../services/ingredients/actions'
+import Loader from '../../loader/loader'
 
 const nutritions = [
     {
@@ -64,7 +65,7 @@ export default function IngredientDetails() {
 
     const renderDetails = () => {
         if (loading) {
-            return <h1 className="text text_type_main-medium">Загрузка...</h1>
+            return <Loader />
         }
 
         if (!details) {

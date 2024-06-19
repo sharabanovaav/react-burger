@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux'
 import { Navigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { getIsAuthChecked, getUser } from '../../services/user/reducer'
+import Loader from '../loader/loader'
 
 function ProtectedRoute({ onlyUnAuth = false, component }) {
     const isAuthChecked = useSelector(getIsAuthChecked)
@@ -9,7 +10,7 @@ function ProtectedRoute({ onlyUnAuth = false, component }) {
     const location = useLocation()
 
     if (!isAuthChecked) {
-        return <p>Загрузка...</p>
+        return <Loader title="Загрузка..." />
     }
 
     if (onlyUnAuth && user) {

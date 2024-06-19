@@ -4,23 +4,31 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { api } from '../../utils/api'
+import { getUser } from '../../services/user/reducer'
+import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys.ts'
 
 export function ResetPassword() {
+    const user = useSelector(getUser)
     const [token, setToken] = useState('')
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if (!localStorage.getItem(RESET_PASSWORD_LC_KEY)) {
+            navigate(user ? '/' : '/forgot-password')
+        }
+
+        return localStorage.removeItem(RESET_PASSWORD_LC_KEY)
+    })
+
     async function handleSubmit(event) {
         event.preventDefault()
-
-        const { success } = await api.resetPassword({ token, password })
-
-        if (success) {
-            navigate('/login')
-        }
+        await api.resetPassword({ token, password })
+        navigate('/login')
     }
 
     return (

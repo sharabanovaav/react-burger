@@ -2,15 +2,16 @@ import { useSelector } from 'react-redux'
 import styles from './order-details.module.css'
 import imageDone from '../../../images/done.png'
 import { getOrderId, getLoading } from '../../../services/order/reducer'
+import Loader from '../../loader/loader'
 
 export default function OrderDetails() {
     const orderId = useSelector(getOrderId)
     const isLoading = useSelector(getLoading)
 
     return (
-        <section className={`${styles.content} mt-20`}>
+        <section className={`${styles.content} ${isLoading ? '' : 'mt-20'}`}>
             {isLoading ? (
-                <p className="text text_type_main-medium">Загрузка...</p>
+                <Loader title="Оформление заказа..." />
             ) : (
                 <>
                     <p className="mb-32 text text_type_digits-large">
