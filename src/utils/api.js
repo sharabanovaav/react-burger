@@ -82,7 +82,9 @@ const resetPassword = ({ password, token }) =>
             password,
             token,
         }),
-    }).then(checkReponse)
+    })
+        .then(checkReponse)
+        .then(() => localStorage.removeItem(RESET_PASSWORD_LC_KEY))
 
 const registerUser = ({ email, password, name }) =>
     fetch(`${BURGER_API_URL}/auth/register`, {

@@ -7,6 +7,7 @@ import {
     getUser as getUserSelector,
 } from '../../services/user/reducer'
 import { getUser } from '../../services/user/actions'
+import { loadIngredients } from '../../services/ingredients/actions'
 
 import Modal from '../modal/modal'
 import {
@@ -32,6 +33,8 @@ export default function App() {
     const { state } = location
 
     useEffect(() => {
+        dispatch(loadIngredients())
+
         if (localStorage.getItem('accessToken')) {
             if (!user) {
                 dispatch(getUser())
@@ -39,7 +42,7 @@ export default function App() {
         } else {
             dispatch(setIsAuthChecked(true))
         }
-    })
+    }, [])
 
     return (
         <div>

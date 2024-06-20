@@ -1,12 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import styles from './ingredient-details.module.css'
 import {
     getIngredients,
     getLoading,
 } from '../../../services/ingredients/reducer'
-import { loadIngredients } from '../../../services/ingredients/actions'
 import Loader from '../../loader/loader'
 
 const nutritions = [
@@ -32,8 +31,6 @@ export default function IngredientDetails() {
     const ingredients = useSelector(getIngredients)
     const loading = useSelector(getLoading)
 
-    const dispatch = useDispatch()
-
     const { id } = useParams()
 
     const ingredientsMap = useMemo(
@@ -45,12 +42,6 @@ export default function IngredientDetails() {
     )
 
     const details = useMemo(() => ingredientsMap.get(id), [id, ingredientsMap])
-
-    useEffect(() => {
-        if (!ingredients.length && !loading) {
-            dispatch(loadIngredients())
-        }
-    })
 
     const renderNutrition = (name, value) => (
         <div key={name} className={styles.nutrition}>

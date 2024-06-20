@@ -21,9 +21,7 @@ export function ResetPassword() {
         if (!localStorage.getItem(RESET_PASSWORD_LC_KEY)) {
             navigate(user ? '/' : '/forgot-password')
         }
-
-        return localStorage.removeItem(RESET_PASSWORD_LC_KEY)
-    })
+    }, [])
 
     async function handleSubmit(event) {
         event.preventDefault()

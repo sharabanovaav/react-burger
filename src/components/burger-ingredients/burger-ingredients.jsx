@@ -1,11 +1,10 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useState, useEffect, useRef, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useRef, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
-import { loadIngredients } from '../../services/ingredients/actions'
-import { getIngredients, getLoading } from '../../services/ingredients/reducer'
+import { getIngredients } from '../../services/ingredients/reducer'
 import {
     getBun,
     getIngredients as getConstructorIngredients,
@@ -29,7 +28,6 @@ const ingredientTypes = [
 
 export default function BurgerIngredients() {
     const ingredients = useSelector(getIngredients)
-    const loading = useSelector(getLoading)
     const constructorIngredients = useSelector(getConstructorIngredients)
     const bun = useSelector(getBun)
 
@@ -39,14 +37,6 @@ export default function BurgerIngredients() {
     const titlesRefs = useRef([])
 
     const location = useLocation()
-
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (!ingredients.length && !loading) {
-            dispatch(loadIngredients())
-        }
-    })
 
     const ingredientsCountDict = useMemo(() => {
         const countsDict = {}

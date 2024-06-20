@@ -6,11 +6,11 @@ import Loader from '../../loader/loader'
 
 export default function OrderDetails() {
     const orderId = useSelector(getOrderId)
-    const isLoading = useSelector(getLoading)
+    const loading = useSelector(getLoading)
 
     return (
-        <section className={`${styles.content} ${isLoading ? '' : 'mt-20'}`}>
-            {isLoading ? (
+        <section className={`${styles.content} ${loading ? '' : 'mt-20'}`}>
+            {loading ? (
                 <Loader title="Оформление заказа..." />
             ) : (
                 <>
