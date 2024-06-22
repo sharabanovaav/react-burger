@@ -4,6 +4,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
@@ -17,13 +18,16 @@ import {
 } from '../../services/burger-constructor/reducer'
 import { createOrder } from '../../services/order/actions'
 import { reset } from '../../services/order/reducer'
+import { getUser } from '../../services/user/reducer'
 
 export default function BurgerConstructor() {
+    const user = useSelector(getUser)
     const totalPrice = useSelector(getTotalPrice)
     const bun = useSelector(getBun)
     const ingredients = useSelector(getIngredients)
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const { isModalOpen, openModal, closeModal } = useModal()
 
@@ -35,8 +39,12 @@ export default function BurgerConstructor() {
     }, [bun, ingredients])
 
     const submitOrder = () => {
-        dispatch(createOrder(orderRequest))
-        openModal()
+        if (!user) {
+            navigate('/login')
+        } else {
+            dispatch(createOrder(orderRequest))
+            openModal()
+        }
     }
 
     const closeModalHandler = () => {

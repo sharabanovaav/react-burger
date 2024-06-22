@@ -1,11 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { getIngredients } from '../../utils/norma-api'
+import { api } from '../../utils/api'
 
-/* eslint-disable */
 export const loadIngredients = createAsyncThunk(
     'ingredients/loadIngredients',
     async () => {
-        const { data } = await getIngredients()
+        const { data } = await api.getIngredients()
         return data
     }
 )

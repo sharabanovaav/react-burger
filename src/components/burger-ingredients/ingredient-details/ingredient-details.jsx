@@ -1,6 +1,12 @@
 import { useSelector } from 'react-redux'
+import { useParams, Link } from 'react-router-dom'
+import { useMemo } from 'react'
 import styles from './ingredient-details.module.css'
-import { getDetails } from '../../../services/ingredient-details/reducer'
+import {
+    getIngredients,
+    getLoading,
+} from '../../../services/ingredients/reducer'
+import Loader from '../../loader/loader'
 
 const nutritions = [
     {
@@ -22,7 +28,20 @@ const nutritions = [
 ]
 
 export default function IngredientDetails() {
-    const details = useSelector(getDetails)
+    const ingredients = useSelector(getIngredients)
+    const loading = useSelector(getLoading)
+
+    const { id } = useParams()
+
+    const ingredientsMap = useMemo(
+        () =>
+            new Map(
+                ingredients.map((ingredient) => [ingredient._id, ingredient])
+            ),
+        [ingredients]
+    )
+
+    const details = useMemo(() => ingredientsMap.get(id), [id, ingredientsMap])
 
     const renderNutrition = (name, value) => (
         <div key={name} className={styles.nutrition}>
@@ -34,20 +53,48 @@ export default function IngredientDetails() {
             </span>
         </div>
     )
+
+    const renderDetails = () => {
+        if (loading) {
+            return <Loader />
+        }
+
+        if (!details) {
+            return (
+                <>
+                    <h1 className="text text_type_main-medium mb-6">
+                        Ингредиент с ID {id} не найден
+                    </h1>
+                    <Link className="link" to="/">
+                        На главную
+                    </Link>
+                </>
+            )
+        }
+
+        return (
+            <>
+                <img
+                    className="mb-4"
+                    src={details.image_large}
+                    alt={`${details.name}.`}
+                />
+                <p className="text text_type_main-medium mb-8">
+                    {details.name}
+                </p>
+
+                <div className={styles.nutritions}>
+                    {nutritions.map(({ name, key }) =>
+                        renderNutrition(name, details[key])
+                    )}
+                </div>
+            </>
+        )
+    }
+
     return (
         <section className={`${styles.content} mt-20`}>
-            <img
-                className="mb-4"
-                src={details.image_large}
-                alt={`${details.name}.`}
-            />
-            <p className="text text_type_main-medium mb-8">{details.name}</p>
-
-            <div className={styles.nutritions}>
-                {nutritions.map(({ name, key }) =>
-                    renderNutrition(name, details[key])
-                )}
-            </div>
+            {renderDetails()}
         </section>
     )
 }

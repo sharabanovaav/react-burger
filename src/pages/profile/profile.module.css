@@ -1,0 +1,35 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 320px 600px;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 60px;
+    justify-content: center;
+}
+
+.caption {
+   opacity: 40%;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link_inactive {
+    color: var(--text-inactive-color);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    text-align: inherit;
+    background: inherit;
+    border: inherit;
+    color: var(--text-inactive-color);
+    cursor: pointer;
+}
