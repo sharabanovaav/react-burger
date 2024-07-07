@@ -26,7 +26,7 @@ const navItems = {
 }
 
 export default function AppHeader() {
-    const renderNavigationLink = ({ icon, title, url }) => {
+    const renderNavigationItem = ({ icon, title, url }) => {
         const classes = `${styles.link} pl-5 pr-5 pb-4 pt-4`
 
         return (
@@ -52,13 +52,15 @@ export default function AppHeader() {
         <header className={`${styles.header} pb-4 pt-4`}>
             <nav className={styles.navigation}>
                 <div className={styles.links}>
-                    {renderNavigationLink(navItems.home)}
-                    {renderNavigationLink(navItems.orders)}
+                    {renderNavigationItem(navItems.home)}
+                    {renderNavigationItem(navItems.orders)}
                 </div>
 
-                <Logo />
+                <NavLink to="/">
+                    <Logo />
+                </NavLink>
 
-                {renderNavigationLink(navItems.profile)}
+                {renderNavigationItem(navItems.profile)}
             </nav>
         </header>
     )
