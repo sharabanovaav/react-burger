@@ -3,18 +3,13 @@ import { api } from '../../utils/api'
 
 export const getUser = createAsyncThunk('user/getUser', () => api.getUser())
 
-export const login = createAsyncThunk('user/login', (request) =>
-    api.login(request)
-)
+export const login = createAsyncThunk('user/login', api.login)
 
-export const logout = createAsyncThunk('user/logout', (request) =>
-    api.logout(request)
-)
+export const logout = createAsyncThunk('user/logout', api.logout)
 
-export const registerUser = createAsyncThunk('user/registerUser', (request) =>
-    api.registerUser(request)
-)
+export const updateUser = createAsyncThunk('user/updateUser', api.updateUser)
 
-export const updateUser = createAsyncThunk('user/updateUser', (request) =>
-    api.updateUser(request)
+export const registerUser = createAsyncThunk(
+    'user/registerUser',
+    api.registerUser
 )

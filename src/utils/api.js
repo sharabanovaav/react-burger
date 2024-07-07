@@ -6,11 +6,13 @@ import {
 
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api'
 
-const checkReponse = (res) =>
-    res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
+const request = (endpoint, options) =>
+    fetch(`${BURGER_API_URL}/${endpoint}`, options).then((res) =>
+        res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
+    )
 
 export const renewRefreshToken = () =>
-    fetch(`${BURGER_API_URL}/auth/token`, {
+    request('auth/token', {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -18,37 +20,30 @@ export const renewRefreshToken = () =>
         body: JSON.stringify({
             token: localStorage.getItem(REFRESH_TOKEN_LC_KEY),
         }),
+    }).then((refreshData) => {
+        if (!refreshData.success) {
+            return Promise.reject(refreshData)
+        }
+        localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshData.refreshToken)
+        localStorage.setItem(ACCESS_TOKEN_LC_KEY, refreshData.accessToken)
+        return refreshData
     })
-        .then(checkReponse)
-        .then((refreshData) => {
-            if (!refreshData.success) {
-                return Promise.reject(refreshData)
-            }
-            localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshData.refreshToken)
-            localStorage.setItem(ACCESS_TOKEN_LC_KEY, refreshData.accessToken)
-            return refreshData
-        })
 
-export const fetchWithRefresh = async (url, options) => {
+export const fetchWithRefresh = async (endpoint, options) => {
     try {
-        const res = await fetch(url, options)
-        return await checkReponse(res)
+        return await request(endpoint, options)
     } catch (err) {
         if (err.message === 'jwt expired') {
             const refreshData = await renewRefreshToken()
             options.headers.authorization = refreshData.accessToken
-            const res = await fetch(url, options)
-            return checkReponse(res)
+            return request(endpoint, options)
         }
         return Promise.reject(err)
     }
 }
 
-const getIngredients = () =>
-    fetch(`${BURGER_API_URL}/ingredients`).then(checkReponse)
-
 const makeOrder = (ingredients) =>
-    fetchWithRefresh(`${BURGER_API_URL}/orders`, {
+    fetchWithRefresh('orders', {
         headers: {
             'Content-Type': 'application/json',
             authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
@@ -59,90 +54,8 @@ const makeOrder = (ingredients) =>
         }),
     })
 
-const getResetToken = (email) =>
-    fetch(`${BURGER_API_URL}/password-reset`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            email,
-        }),
-    })
-        .then(checkReponse)
-        .then(() => localStorage.setItem(RESET_PASSWORD_LC_KEY, true))
-
-const resetPassword = ({ password, token }) =>
-    fetch(`${BURGER_API_URL}/password-reset/reset`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            password,
-            token,
-        }),
-    })
-        .then(checkReponse)
-        .then(() => localStorage.removeItem(RESET_PASSWORD_LC_KEY))
-
-const registerUser = ({ email, password, name }) =>
-    fetch(`${BURGER_API_URL}/auth/register`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            email,
-            password,
-            name,
-        }),
-    })
-        .then(checkReponse)
-        .then(({ accessToken, refreshToken, user }) => {
-            localStorage.setItem(ACCESS_TOKEN_LC_KEY, accessToken)
-            localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshToken)
-
-            return user
-        })
-
-const login = ({ email, password }) =>
-    fetch(`${BURGER_API_URL}/auth/login`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-    })
-        .then(checkReponse)
-        .then(({ accessToken, refreshToken, user }) => {
-            localStorage.setItem(ACCESS_TOKEN_LC_KEY, accessToken)
-            localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshToken)
-
-            return user
-        })
-
-const logout = () =>
-    fetch(`${BURGER_API_URL}/auth/logout`, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-            token: localStorage.getItem(REFRESH_TOKEN_LC_KEY),
-        }),
-    })
-        .then(checkReponse)
-        .then(() => {
-            localStorage.removeItem(ACCESS_TOKEN_LC_KEY)
-            localStorage.removeItem(REFRESH_TOKEN_LC_KEY)
-        })
-
 const getUser = () =>
-    fetchWithRefresh(`${BURGER_API_URL}/auth/user`, {
+    fetchWithRefresh('auth/user', {
         headers: {
             authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
         },
@@ -150,7 +63,7 @@ const getUser = () =>
     }).then(({ user }) => user)
 
 const updateUser = ({ email, name, password }) =>
-    fetchWithRefresh(`${BURGER_API_URL}/auth/user`, {
+    fetchWithRefresh('auth/user', {
         headers: {
             'Content-Type': 'application/json',
             authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
@@ -162,6 +75,80 @@ const updateUser = ({ email, name, password }) =>
             password,
         }),
     }).then(({ user }) => user)
+
+const getIngredients = () => request('ingredients')
+
+const getResetToken = (email) =>
+    request('password-reset', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+        }),
+    }).then(() => localStorage.setItem(RESET_PASSWORD_LC_KEY, true))
+
+const resetPassword = ({ password, token }) =>
+    request('password-reset/reset', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            password,
+            token,
+        }),
+    }).then(() => localStorage.removeItem(RESET_PASSWORD_LC_KEY))
+
+const registerUser = ({ email, password, name }) =>
+    request('auth/register', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password,
+            name,
+        }),
+    }).then(({ accessToken, refreshToken, user }) => {
+        localStorage.setItem(ACCESS_TOKEN_LC_KEY, accessToken)
+        localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshToken)
+
+        return user
+    })
+
+const login = ({ email, password }) =>
+    request('auth/login', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            email,
+            password,
+        }),
+    }).then(({ accessToken, refreshToken, user }) => {
+        localStorage.setItem(ACCESS_TOKEN_LC_KEY, accessToken)
+        localStorage.setItem(REFRESH_TOKEN_LC_KEY, refreshToken)
+
+        return user
+    })
+
+const logout = () =>
+    request('auth/logout', {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+            token: localStorage.getItem(REFRESH_TOKEN_LC_KEY),
+        }),
+    }).then(() => {
+        localStorage.removeItem(ACCESS_TOKEN_LC_KEY)
+        localStorage.removeItem(REFRESH_TOKEN_LC_KEY)
+    })
 
 export const api = {
     getUser,
