@@ -39,6 +39,9 @@ export const fetchWithRefresh = async <T>(endpoint: string, options?: RequestIni
             const headers = options?.headers ? new Headers(options.headers) : new Headers();
 
             headers.set("Authorization", refreshData.accessToken);
+            if (options) {
+                options.headers = headers
+            }
            
             return request(endpoint, options)
         }
