@@ -5,11 +5,13 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { SyntheticEvent } from 'react'
 import { registerUser } from '../../services/user/actions'
 import { useForm } from '../../hooks/use-form'
+import { TUserForm } from '../../types'
 
 export function Register() {
-    const { values, handleChange } = useForm({
+    const { values, handleChange } = useForm<TUserForm>({
         name: '',
         email: '',
         password: '',
@@ -17,12 +19,13 @@ export function Register() {
 
     const dispatch = useDispatch()
 
-    function handleSubmit(event) {
+    const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
 
         const { email, name, password } = values
 
         dispatch(
+            // @ts-ignore
             registerUser({
                 name,
                 email,

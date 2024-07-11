@@ -9,9 +9,15 @@ import {
     getBun,
     getIngredients as getConstructorIngredients,
 } from '../../services/burger-constructor/reducer'
-import { BUNS_QUANTITY } from '../../consts/index.ts'
+import { BUNS_QUANTITY } from '../../consts'
+import { TIngredient, TIngredientType } from '../../types'
 
-const ingredientTypes = [
+type TIndredientTab= {
+    name: string
+    type: TIngredientType
+}
+
+const ingredientTabs: TIndredientTab[] = [
     {
         name: 'Булки',
         type: 'bun',
@@ -31,15 +37,15 @@ export default function BurgerIngredients() {
     const constructorIngredients = useSelector(getConstructorIngredients)
     const bun = useSelector(getBun)
 
-    const [activeTabType, setActiveTabType] = useState(ingredientTypes[0].type)
+    const [activeTabType, setActiveTabType] = useState<TIngredientType>(ingredientTabs[0].type)
 
-    const tabsRef = useRef(null)
-    const titlesRefs = useRef([])
+    const tabsRef = useRef<HTMLDivElement | null>(null)
+    const titlesRefs = useRef<HTMLDivElement[]>([])
 
     const location = useLocation()
 
     const ingredientsCountDict = useMemo(() => {
-        const countsDict = {}
+        const countsDict: Record<string, number> = {}
 
         if (bun) {
             countsDict[bun._id] = BUNS_QUANTITY
@@ -56,18 +62,16 @@ export default function BurgerIngredients() {
     const ingredientsDict = useMemo(
         () =>
             ingredients.reduce((dict, ingredient) => {
-                if (!dict[ingredient.type]) {
-                    dict[ingredient.type] = []
-                }
+                dict[ingredient.type] ??= []
 
                 dict[ingredient.type].push(ingredient)
                 return dict
-            }, {}),
+            }, {} as Record<TIngredientType, TIngredient[]>),
         [ingredients]
     )
 
-    const scrollHandler = () => {
-        const tabsBottom = tabsRef.current.getBoundingClientRect().bottom
+    const scrollHandler = (): void => {
+        const tabsBottom = tabsRef.current?.getBoundingClientRect().bottom ?? 0
 
         const diffs = titlesRefs.current.map((titleRef) => {
             const { top } = titleRef.getBoundingClientRect()
@@ -77,15 +81,15 @@ export default function BurgerIngredients() {
 
         const activeIndex = diffs.indexOf(Math.min(...diffs))
 
-        setActiveTabType(ingredientTypes[activeIndex].type)
+        setActiveTabType(ingredientTabs[activeIndex].type)
     }
 
-    const tabClickHandler = (type, index) => {
+    const tabClickHandler = (type: TIngredientType, index: number): void => {
         setActiveTabType(type)
         titlesRefs.current[index].scrollIntoView({ behavior: 'smooth' })
     }
 
-    const renderTypeTab = ({ type, name }, index) => (
+    const renderTypeTab = ({ type, name }: TIndredientTab, index: number): JSX.Element => (
         <Tab
             key={type}
             value={type}
@@ -96,11 +100,11 @@ export default function BurgerIngredients() {
         </Tab>
     )
 
-    const renderIngredients = ({ type, name }, index) => (
+    const renderIngredients = ({ type, name }: TIndredientTab, index: number): JSX.Element => (
         <div
             key={`ingredient-${type}`}
             ref={(el) => {
-                titlesRefs.current[index] = el
+                if (el) titlesRefs.current[index] = el
             }}
         >
             <h2 className="text text_type_main-medium mb-6 mt-10">{name}</h2>
@@ -130,7 +134,7 @@ export default function BurgerIngredients() {
             </h1>
 
             <div className={styles.tabs} ref={tabsRef}>
-                {ingredientTypes.map((type, index) =>
+                {ingredientTabs.map((type, index) =>
                     renderTypeTab(type, index)
                 )}
             </div>
@@ -140,7 +144,7 @@ export default function BurgerIngredients() {
                     className={`${styles.ingredients} custom-scroll`}
                     onScroll={scrollHandler}
                 >
-                    {ingredientTypes.map(renderIngredients)}
+                    {ingredientTabs.map(renderIngredients)}
                 </div>
             )}
         </section>

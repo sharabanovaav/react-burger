@@ -2,23 +2,36 @@ import {
     ConstructorElement,
     DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
 
 import { useDrop, useDrag } from 'react-dnd'
 import { useRef } from 'react'
-import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
 import styles from './draggable-ingredient.module.css'
+import { TIngredient } from '../../../types'
+
+type TDragObject = {
+    index: number
+}
+
+type TCollectedProps = {
+    isDragging: boolean
+}
+
+type TDraggableIngredientProps = {
+    ingredient: TIngredient
+    index: number
+    onDelete: (id: string) => void
+    onMove: (dragIndex: number, hoverIndex: number) => void
+}
 
 export default function DraggableIngredient({
     ingredient,
     index,
     onDelete,
     onMove,
-}) {
-    const ref = useRef(null)
+}: TDraggableIngredientProps) {
+    const ref = useRef<HTMLDivElement | null>(null)
 
-    // eslint-disable-next-line no-unused-vars
-    const [_, drop] = useDrop({
+    const [_, drop] = useDrop<TDragObject, unknown, unknown>({
         accept: 'ingredientCard',
         hover(item, monitor) {
             if (!ref.current) return
@@ -32,6 +45,9 @@ export default function DraggableIngredient({
             const hoverMiddleY =
                 (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
             const clientOffset = monitor.getClientOffset()
+
+            if (!clientOffset) return
+
             const hoverClientY = clientOffset.y - hoverBoundingRect.top
 
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
@@ -43,7 +59,7 @@ export default function DraggableIngredient({
         },
     })
 
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag] = useDrag<TDragObject, unknown, TCollectedProps>({
         type: 'ingredientCard',
         item: () => ({ index }),
         collect: (monitor) => ({
@@ -65,15 +81,10 @@ export default function DraggableIngredient({
                 text={ingredient.name}
                 price={ingredient.price}
                 thumbnail={ingredient.image}
-                handleClose={() => onDelete(ingredient.customId)}
+                handleClose={() => onDelete(ingredient.customId ?? '')}
             />
         </div>
     )
 }
 
-DraggableIngredient.propTypes = {
-    ingredient: ingredientPropTypes.isRequired,
-    index: PropTypes.number,
-    onDelete: PropTypes.func,
-    onMove: PropTypes.func,
-}
+

@@ -4,17 +4,18 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect , SyntheticEvent } from 'react'
 import { useSelector } from 'react-redux'
 import { api } from '../../utils/api'
 import { getUser } from '../../services/user/reducer'
-import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys.ts'
+import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys'
 import { useForm } from '../../hooks/use-form'
+import { TResetForm } from '../../types'
 
 export function ResetPassword() {
     const user = useSelector(getUser)
 
-    const { values, handleChange } = useForm({
+    const { values, handleChange } = useForm<TResetForm>({
         token: '',
         password: '',
     })
@@ -27,7 +28,7 @@ export function ResetPassword() {
         }
     }, [])
 
-    async function handleSubmit(event) {
+    const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
 
         const { token, password } = values

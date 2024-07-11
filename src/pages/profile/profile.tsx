@@ -20,13 +20,14 @@ export function Profile() {
         }
     }
 
-    const getLinkClassName = (path) => {
+    const getLinkClassName = (path: string): string => {
         const activeClass = path === pathname ? '' : styles.link_inactive
 
         return `${styles.link} text text_type_main-medium pt-4 pb-4 ${activeClass}`
     }
 
     const handleLogout = () => {
+        // @ts-ignore
         dispatch(logout())
     }
 

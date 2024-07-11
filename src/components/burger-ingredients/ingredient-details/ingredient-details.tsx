@@ -7,8 +7,14 @@ import {
     getLoading,
 } from '../../../services/ingredients/reducer'
 import Loader from '../../loader/loader'
+import { TIngredient } from '../../../types'
 
-const nutritions = [
+type TNutrition = {
+    key: keyof Pick<TIngredient, 'calories' | 'proteins' | 'fat' | 'carbohydrates'>
+    name: string
+}
+
+const nutritions: TNutrition[] = [
     {
         key: 'calories',
         name: 'Калории,ккал',
@@ -35,15 +41,13 @@ export default function IngredientDetails() {
 
     const ingredientsMap = useMemo(
         () =>
-            new Map(
-                ingredients.map((ingredient) => [ingredient._id, ingredient])
-            ),
+            new Map(ingredients.map((ingredient) => [ingredient._id, ingredient])),
         [ingredients]
     )
 
-    const details = useMemo(() => ingredientsMap.get(id), [id, ingredientsMap])
+    const details = useMemo(() => ingredientsMap.get(id ?? ''), [id, ingredientsMap])
 
-    const renderNutrition = (name, value) => (
+    const renderNutrition = (name: string, value: number): JSX.Element => (
         <div key={name} className={styles.nutrition}>
             <span className="text text_type_main-default text_color_inactive">
                 {name}
@@ -54,7 +58,7 @@ export default function IngredientDetails() {
         </div>
     )
 
-    const renderDetails = () => {
+    const renderDetails = (): JSX.Element => {
         if (loading) {
             return <Loader />
         }

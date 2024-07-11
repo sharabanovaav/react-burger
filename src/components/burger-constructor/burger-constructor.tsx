@@ -9,7 +9,7 @@ import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
-import useModal from '../../hooks/use-modal'
+import { useModal } from "../../hooks/use-modal"
 import {
     getTotalPrice,
     getIngredients,
@@ -32,28 +32,29 @@ export default function BurgerConstructor() {
     const { isModalOpen, openModal, closeModal } = useModal()
 
     const orderRequest = useMemo(() => {
-        const bunId = bun?._id
+        const bunId = bun?._id ?? ''
         const ingredientsIds = ingredients.map(({ _id }) => `${_id}`)
 
         return [bunId, ...ingredientsIds, bunId]
     }, [bun, ingredients])
 
-    const submitOrder = () => {
+    const submitOrder = (): void => {
         if (!user) {
             navigate('/login')
         } else {
+            // @ts-ignore
             dispatch(createOrder(orderRequest))
             openModal()
         }
     }
 
-    const closeModalHandler = () => {
+    const closeModalHandler = (): void => {
         closeModal()
         dispatch(reset())
         dispatch(resetConstructor())
     }
 
-    const renderModal = () => (
+    const renderModal = (): JSX.Element => (
         <Modal onClose={closeModalHandler}>
             <OrderDetails />
         </Modal>

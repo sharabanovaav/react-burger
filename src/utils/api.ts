@@ -2,17 +2,18 @@ import {
     RESET_PASSWORD_LC_KEY,
     ACCESS_TOKEN_LC_KEY,
     REFRESH_TOKEN_LC_KEY,
-} from '../consts/local-storage-keys.ts'
+} from '../consts/local-storage-keys'
+import { TIngredient, TIngredientsResponse, TLoginResponse, TOrderResponse, TResetForm, TTokenResponse, TUserForm, TUserResponse } from '../types'
 
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api'
 
-const request = (endpoint, options) =>
+const request = <T>(endpoint: string, options?: RequestInit): Promise<T> =>
     fetch(`${BURGER_API_URL}/${endpoint}`, options).then((res) =>
         res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
     )
 
 export const renewRefreshToken = () =>
-    request('auth/token', {
+    request<TTokenResponse>('auth/token', {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -29,24 +30,27 @@ export const renewRefreshToken = () =>
         return refreshData
     })
 
-export const fetchWithRefresh = async (endpoint, options) => {
+export const fetchWithRefresh = async <T>(endpoint: string, options?: RequestInit): Promise<T> => {
     try {
-        return await request(endpoint, options)
-    } catch (err) {
-        if (err.message === 'jwt expired') {
+        return await request<T>(endpoint, options)
+    } catch (error: any) {
+        if (error?.message === 'jwt expired') {
             const refreshData = await renewRefreshToken()
-            options.headers.authorization = refreshData.accessToken
+            const headers = options?.headers ? new Headers(options.headers) : new Headers();
+
+            headers.set("Authorization", refreshData.accessToken);
+           
             return request(endpoint, options)
         }
-        return Promise.reject(err)
+        return Promise.reject(error)
     }
 }
 
-const makeOrder = (ingredients) =>
-    fetchWithRefresh('orders', {
+const makeOrder = (ingredients: TIngredient[]) =>
+    fetchWithRefresh<TOrderResponse>('orders', {
         headers: {
             'Content-Type': 'application/json',
-            authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
+            Authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY) ?? '',
         },
         method: 'POST',
         body: JSON.stringify({
@@ -55,18 +59,18 @@ const makeOrder = (ingredients) =>
     })
 
 const getUser = () =>
-    fetchWithRefresh('auth/user', {
+    fetchWithRefresh<TUserResponse>('auth/user', {
         headers: {
-            authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
+            Authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY) ?? '',
         },
         method: 'GET',
     }).then(({ user }) => user)
 
-const updateUser = ({ email, name, password }) =>
-    fetchWithRefresh('auth/user', {
+const updateUser = ({ email, name, password }: TUserForm) =>
+    fetchWithRefresh<TUserResponse>('auth/user', {
         headers: {
             'Content-Type': 'application/json',
-            authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY),
+            Authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY) ?? '',
         },
         method: 'PATCH',
         body: JSON.stringify({
@@ -76,9 +80,9 @@ const updateUser = ({ email, name, password }) =>
         }),
     }).then(({ user }) => user)
 
-const getIngredients = () => request('ingredients')
+const getIngredients = () => request<TIngredientsResponse>('ingredients')
 
-const getResetToken = (email) =>
+const getResetToken = (email: string) =>
     request('password-reset', {
         headers: {
             'Content-Type': 'application/json',
@@ -87,9 +91,9 @@ const getResetToken = (email) =>
         body: JSON.stringify({
             email,
         }),
-    }).then(() => localStorage.setItem(RESET_PASSWORD_LC_KEY, true))
+    }).then(() => localStorage.setItem(RESET_PASSWORD_LC_KEY, 'true'))
 
-const resetPassword = ({ password, token }) =>
+const resetPassword = ({ password, token }: TResetForm) =>
     request('password-reset/reset', {
         headers: {
             'Content-Type': 'application/json',
@@ -101,8 +105,8 @@ const resetPassword = ({ password, token }) =>
         }),
     }).then(() => localStorage.removeItem(RESET_PASSWORD_LC_KEY))
 
-const registerUser = ({ email, password, name }) =>
-    request('auth/register', {
+const registerUser = ({ email, password, name }: TUserForm) =>
+    request<TLoginResponse>('auth/register', {
         headers: {
             'Content-Type': 'application/json',
         },
@@ -119,8 +123,8 @@ const registerUser = ({ email, password, name }) =>
         return user
     })
 
-const login = ({ email, password }) =>
-    request('auth/login', {
+const login = ({ email, password }: Omit<TUserForm, 'name'>) =>
+    request<TLoginResponse>('auth/login', {
         headers: {
             'Content-Type': 'application/json',
         },

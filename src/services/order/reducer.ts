@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createOrder } from './actions'
 
-const initialState = {
+type TState = {
+    orderId: number | null
+    loading: boolean
+}
+
+const initialState: TState = {
     orderId: null,
     loading: false,
-    error: null,
 }
 
 export const orderSlice = createSlice({
@@ -25,11 +29,9 @@ export const orderSlice = createSlice({
             })
             .addCase(createOrder.pending, (state) => {
                 state.loading = true
-                state.error = null
             })
-            .addCase(createOrder.rejected, (state, action) => {
+            .addCase(createOrder.rejected, (state) => {
                 state.loading = false
-                state.error = action.payload
                 state.orderId = null
             })
     },

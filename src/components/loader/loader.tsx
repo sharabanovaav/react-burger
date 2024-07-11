@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types'
 import styles from './loader.module.css'
 
-export default function Loader({ title }) {
+type TLoaderProps = {
+    title?: string
+}
+
+export default function Loader({ title = '' }: TLoaderProps) {
     return (
         <div className={styles.wrapper}>
             {title && (
@@ -11,8 +14,4 @@ export default function Loader({ title }) {
             <div className={styles.loader} />
         </div>
     )
-}
-
-Loader.propTypes = {
-    title: PropTypes.string,
 }

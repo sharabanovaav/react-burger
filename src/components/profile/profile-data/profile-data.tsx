@@ -3,29 +3,31 @@ import {
     Input,
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useEffect } from 'react'
+import { useEffect, SyntheticEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../../../services/user/reducer'
 import { updateUser } from '../../../services/user/actions'
 import styles from './profile-data.module.css'
 import { useForm } from '../../../hooks/use-form'
+import { TUserForm } from '../../../types'
 
 export function ProfileData() {
     const user = useSelector(getUser)
     const dispatch = useDispatch()
 
-    const { values, handleChange, resetForm } = useForm({
-        name: user.name,
-        email: user.email,
+    const { values, handleChange, resetForm } = useForm<TUserForm>({
+        name: user?.name ?? '',
+        email: user?.email ?? '',
         password: '',
     })
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault()
 
         const { email, name, password } = values
 
         dispatch(
+            // @ts-ignore
             updateUser({
                 email,
                 name,

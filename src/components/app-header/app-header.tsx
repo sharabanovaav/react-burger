@@ -5,9 +5,16 @@ import {
     ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { NavLink } from 'react-router-dom'
+import { TIconTypes } from '../../types'
 import styles from './app-header.module.css'
 
-const navItems = {
+type TNavItem = {
+    icon: (type: TIconTypes) => JSX.Element,
+    title: string,
+    url: string,
+}
+
+const navItems: Record<string, TNavItem> = {
     home: {
         icon: (type) => <BurgerIcon type={type} />,
         title: 'Конструктор',
@@ -26,7 +33,7 @@ const navItems = {
 }
 
 export default function AppHeader() {
-    const renderNavigationItem = ({ icon, title, url }) => {
+    const renderNavigationItem = ({ icon, title, url }: TNavItem): JSX.Element => {
         const classes = `${styles.link} pl-5 pr-5 pb-4 pt-4`
 
         return (
