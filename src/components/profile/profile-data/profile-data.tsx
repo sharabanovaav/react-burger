@@ -3,7 +3,7 @@ import {
     Input,
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useEffect, SyntheticEvent } from 'react'
+import { useEffect, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../../../services/user/reducer'
 import { updateUser } from '../../../services/user/actions'
@@ -21,7 +21,7 @@ export function ProfileData() {
         password: '',
     })
 
-    const handleSubmit = async (event: SyntheticEvent) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         const { email, name, password } = values

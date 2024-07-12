@@ -4,7 +4,7 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect , SyntheticEvent } from 'react'
+import { useEffect , FormEvent } from 'react'
 import { useSelector } from 'react-redux'
 import { api } from '../../utils/api'
 import { getUser } from '../../services/user/reducer'
@@ -28,7 +28,7 @@ export function ResetPassword() {
         }
     }, [])
 
-    const handleSubmit = async (event: SyntheticEvent) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         const { token, password } = values

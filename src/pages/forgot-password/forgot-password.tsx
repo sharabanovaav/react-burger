@@ -3,7 +3,7 @@ import {
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { SyntheticEvent } from 'react'
+import { FormEvent } from 'react'
 import { api } from '../../utils/api'
 import { useForm } from '../../hooks/use-form'
 import { TUserForm } from '../../types'
@@ -15,7 +15,7 @@ export function ForgotPassword() {
 
     const navigate = useNavigate()
 
-    const handleSubmit = async (event: SyntheticEvent) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         await api.getResetToken(values.email)
         navigate('/reset-password')
