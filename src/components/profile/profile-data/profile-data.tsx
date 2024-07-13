@@ -3,24 +3,31 @@ import {
     Input,
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useEffect, useState } from 'react'
+import { useEffect, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../../../services/user/reducer'
 import { updateUser } from '../../../services/user/actions'
 import styles from './profile-data.module.css'
+import { useForm } from '../../../hooks/use-form'
+import { TUserForm } from '../../../types'
 
 export function ProfileData() {
     const user = useSelector(getUser)
     const dispatch = useDispatch()
 
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const { values, handleChange, resetForm } = useForm<TUserForm>({
+        name: user?.name ?? '',
+        email: user?.email ?? '',
+        password: '',
+    })
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
+        const { email, name, password } = values
+
         dispatch(
+            // @ts-ignore
             updateUser({
                 email,
                 name,
@@ -29,14 +36,8 @@ export function ProfileData() {
         )
     }
 
-    const resetData = () => {
-        setName(user.name)
-        setEmail(user.email)
-        setPassword('')
-    }
-
     useEffect(() => {
-        resetData()
+        resetForm()
     }, [user])
 
     return (
@@ -44,18 +45,20 @@ export function ProfileData() {
             <div className="mb-6">
                 <Input
                     placeholder="Имя"
-                    value={name}
+                    value={values.name}
                     icon="EditIcon"
-                    onChange={(e) => setName(e.target.value)}
+                    name="name"
+                    onChange={handleChange}
                 />
             </div>
 
             <div className="mb-6">
                 <Input
                     placeholder="Логин"
-                    value={email}
+                    value={values.email}
                     icon="EditIcon"
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    onChange={handleChange}
                 />
             </div>
 
@@ -63,8 +66,9 @@ export function ProfileData() {
                 <PasswordInput
                     placeholder="Пароль"
                     icon="EditIcon"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
                 />
             </div>
 
@@ -72,7 +76,7 @@ export function ProfileData() {
                 <Button
                     type="secondary"
                     htmlType="button"
-                    onClick={() => resetData()}
+                    onClick={() => resetForm()}
                 >
                     Отмена
                 </Button>

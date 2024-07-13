@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { TUser } from '../../types'
 import {
     login,
     logout,
@@ -7,7 +8,12 @@ import {
     updateUser,
 } from './actions'
 
-const initialState = {
+type TState = {
+    user: TUser | null
+    isAuthChecked: boolean
+}
+
+const initialState: TState = {
     user: null,
     isAuthChecked: false,
 }

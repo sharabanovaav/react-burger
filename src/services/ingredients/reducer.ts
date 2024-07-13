@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { TIngredient } from '../../types'
 import { loadIngredients } from './actions'
 
-const initialState = {
+type TState = {
+    ingredients: TIngredient[]
+    loading: boolean
+}
+
+const initialState: TState = {
     ingredients: [],
     loading: false,
-    error: null,
 }
 
 export const ingredientsSlice = createSlice({
@@ -14,6 +19,7 @@ export const ingredientsSlice = createSlice({
         getIngredients: (state) => state.ingredients,
         getLoading: (state) => state.loading,
     },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(loadIngredients.fulfilled, (state, action) => {
@@ -22,11 +28,9 @@ export const ingredientsSlice = createSlice({
             })
             .addCase(loadIngredients.pending, (state) => {
                 state.loading = true
-                state.error = null
             })
-            .addCase(loadIngredients.rejected, (state, action) => {
+            .addCase(loadIngredients.rejected, (state) => {
                 state.loading = false
-                state.error = action.payload
                 state.ingredients = []
             })
     },

@@ -5,19 +5,26 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { useState } from 'react'
+import { FormEvent } from 'react'
 import { login } from '../../services/user/actions'
+import { useForm } from '../../hooks/use-form'
+import { TUserForm } from '../../types'
 
 export function Login() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const { values, handleChange } = useForm<Omit<TUserForm, 'name'>>({
+        email: '',
+        password: '',
+    })
 
     const dispatch = useDispatch()
 
-    function handleSubmit(event) {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
+        const { email, password } = values
+
         dispatch(
+            // @ts-ignore
             login({
                 email,
                 password,
@@ -34,16 +41,18 @@ export function Login() {
                     <Input
                         placeholder="E-mail"
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
                     />
                 </div>
 
                 <div className="mb-6">
                     <PasswordInput
                         placeholder="Пароль"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        name="password"
+                        value={values.password}
+                        onChange={handleChange}
                     />
                 </div>
 

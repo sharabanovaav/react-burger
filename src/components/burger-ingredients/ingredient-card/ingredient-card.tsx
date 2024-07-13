@@ -2,14 +2,22 @@ import {
     CurrencyIcon,
     Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
 
 import { useDrag } from 'react-dnd'
-import ingredientPropTypes from '../../../consts/ingredient-prop-types.ts'
+import { TIngredient } from '../../../types'
 import styles from './ingredient-card.module.css'
 
-export default function IngredientCard({ ingredient, count = 0, onClick }) {
-    const [{ opacity }, dragRef] = useDrag({
+type TCollectedProps = {
+    opacity: number
+}
+
+type TIngredientCardProps = {
+    ingredient: TIngredient
+    count: number
+}
+
+export default function IngredientCard({ ingredient, count = 0 }: TIngredientCardProps) {
+    const [{ opacity }, dragRef] = useDrag<TIngredient, unknown, TCollectedProps>({
         type: 'ingredient',
         item: ingredient,
         collect: (monitor) => ({
@@ -20,13 +28,11 @@ export default function IngredientCard({ ingredient, count = 0, onClick }) {
     return (
         <div
             className={styles.card}
-            onClick={onClick}
             ref={dragRef}
             style={{ opacity }}
         >
             {count > 0 && (
                 <Counter
-                    className={styles.counter}
                     count={count}
                     size="default"
                 />
@@ -47,10 +53,4 @@ export default function IngredientCard({ ingredient, count = 0, onClick }) {
             </span>
         </div>
     )
-}
-
-IngredientCard.propTypes = {
-    ingredient: ingredientPropTypes.isRequired,
-    count: PropTypes.number,
-    onClick: PropTypes.func,
 }

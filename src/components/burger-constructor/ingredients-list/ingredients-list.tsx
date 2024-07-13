@@ -13,27 +13,24 @@ import {
     setIngredients,
 } from '../../../services/burger-constructor/reducer'
 import IngredientStub from '../ingredient-stub/ingredient-stub'
-import { BUN_TYPE, INGREDIENT_TYPE } from '../../../consts/index.ts'
 import DraggableIngredient from '../draggable-ingredient/draggable-ingredient'
+import { TIngredient, TIngredientType } from '../../../types'
 
 export default function IngredientsList() {
     const ingredients = useSelector(getIngredients)
     const bun = useSelector(getBun)
     const dispatch = useDispatch()
 
-    const [hoveredType, setHoveredType] = useState('')
+    const [hoveredType, setHoveredType] = useState<TIngredientType | ''>('')
 
-    // eslint-disable-next-line no-unused-vars
-    const [_, dropTarget] = useDrop({
+    const [, dropTarget] = useDrop<TIngredient, unknown, unknown>({
         accept: 'ingredient',
         hover(ingredient) {
-            setHoveredType(
-                ingredient.type === BUN_TYPE ? BUN_TYPE : INGREDIENT_TYPE
-            )
+            setHoveredType(ingredient.type)
         },
         drop(ingredient) {
             setHoveredType('')
-            if (ingredient.type === BUN_TYPE) {
+            if (ingredient.type === "bun") {
                 dispatch(setBun(ingredient))
             } else {
                 dispatch(addIngredient({
@@ -44,11 +41,11 @@ export default function IngredientsList() {
         },
     })
 
-    const deleteHandler = (customId) => {
+    const deleteHandler = (customId: string): void => {
         dispatch(deleteIngredient(customId))
     }
 
-    const moveHandler = (fromIndex, toIndex) => {
+    const moveHandler = (fromIndex: number, toIndex: number): void => {
         const dragCard = ingredients[fromIndex]
         const newIngredients = [...ingredients]
 
@@ -58,7 +55,7 @@ export default function IngredientsList() {
         dispatch(setIngredients(newIngredients))
     }
 
-    const renderBun = (type, comment) => (
+    const renderBun = (type: "top" | "bottom", comment: string): JSX.Element => (
         <div className="ml-8">
             {bun ? (
                 <ConstructorElement
@@ -72,7 +69,7 @@ export default function IngredientsList() {
                 <IngredientStub
                     title="Выберите булки"
                     type={type}
-                    hovered={hoveredType === BUN_TYPE}
+                    hovered={hoveredType === "bun"}
                 />
             )}
         </div>
@@ -98,7 +95,7 @@ export default function IngredientsList() {
                 <div className="ml-8">
                     <IngredientStub
                         title="Выберите начинку"
-                        hovered={hoveredType === INGREDIENT_TYPE}
+                        hovered={hoveredType === "main" || hoveredType === "sauce"}
                     />
                 </div>
             )}

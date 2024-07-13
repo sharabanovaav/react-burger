@@ -3,17 +3,21 @@ import {
     Input,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { FormEvent } from 'react'
 import { api } from '../../utils/api'
+import { useForm } from '../../hooks/use-form'
+import { TUserForm } from '../../types'
 
 export function ForgotPassword() {
-    const [email, setEmail] = useState('')
+    const { values, handleChange } = useForm<Pick<TUserForm, 'email'>>({
+        email: '',
+    })
 
     const navigate = useNavigate()
 
-    async function handleSubmit(event) {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        await api.getResetToken(email)
+        await api.getResetToken(values.email)
         navigate('/reset-password')
     }
 
@@ -28,8 +32,9 @@ export function ForgotPassword() {
                     <Input
                         placeholder="Укажите e-mail"
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -38,7 +43,7 @@ export function ForgotPassword() {
                         htmlType="submit"
                         type="primary"
                         size="medium"
-                        disabled={!email}
+                        disabled={!values.email}
                     >
                         Восстановить
                     </Button>

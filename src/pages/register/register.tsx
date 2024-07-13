@@ -4,21 +4,28 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { FormEvent } from 'react'
 import { registerUser } from '../../services/user/actions'
+import { useForm } from '../../hooks/use-form'
+import { TUserForm } from '../../types'
 
 export function Register() {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const { values, handleChange } = useForm<TUserForm>({
+        name: '',
+        email: '',
+        password: '',
+    })
 
     const dispatch = useDispatch()
 
-    function handleSubmit(event) {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
+        const { email, name, password } = values
+
         dispatch(
+            // @ts-ignore
             registerUser({
                 name,
                 email,
@@ -36,8 +43,9 @@ export function Register() {
                     <Input
                         placeholder="Имя"
                         type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -45,16 +53,18 @@ export function Register() {
                     <Input
                         placeholder="E-mail"
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
                     />
                 </div>
 
                 <div className="mb-6">
                     <PasswordInput
                         placeholder="Пароль"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        name="password"
+                        value={values.password}
+                        onChange={handleChange}
                     />
                 </div>
 

@@ -4,16 +4,21 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect , FormEvent } from 'react'
 import { useSelector } from 'react-redux'
 import { api } from '../../utils/api'
 import { getUser } from '../../services/user/reducer'
-import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys.ts'
+import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys'
+import { useForm } from '../../hooks/use-form'
+import { TResetForm } from '../../types'
 
 export function ResetPassword() {
     const user = useSelector(getUser)
-    const [token, setToken] = useState('')
-    const [password, setPassword] = useState('')
+
+    const { values, handleChange } = useForm<TResetForm>({
+        token: '',
+        password: '',
+    })
 
     const navigate = useNavigate()
 
@@ -23,8 +28,11 @@ export function ResetPassword() {
         }
     }, [])
 
-    async function handleSubmit(event) {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+
+        const { token, password } = values
+
         await api.resetPassword({ token, password })
         navigate('/login')
     }
@@ -39,8 +47,9 @@ export function ResetPassword() {
                 <div className="mb-6">
                     <PasswordInput
                         placeholder="Введите новый пароль"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={values.password}
+                        name="password"
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -48,8 +57,9 @@ export function ResetPassword() {
                     <Input
                         placeholder="Введите код из письма"
                         type="text"
-                        value={token}
-                        onChange={(e) => setToken(e.target.value)}
+                        value={values.token}
+                        name="token"
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -58,7 +68,7 @@ export function ResetPassword() {
                         htmlType="submit"
                         type="primary"
                         size="medium"
-                        disabled={!token || !password}
+                        disabled={!values.token || !values.password}
                     >
                         Сохранить
                     </Button>

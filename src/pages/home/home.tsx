@@ -8,8 +8,12 @@ export function Home() {
     return (
         <main className={styles.main}>
             <DndProvider backend={HTML5Backend}>
-                <BurgerIngredients className={styles.section} />
-                <BurgerConstructor className={styles.section} />
+                <div className={styles.section}>
+                    <BurgerIngredients  />
+                </div>
+                <div className={styles.section}>
+                    <BurgerConstructor  />
+                </div>
             </DndProvider>
         </main>
     )
