@@ -18,6 +18,7 @@ import {
     ForgotPassword,
     ResetPassword,
     Profile,
+    Feed,
 } from '../../pages'
 
 import IngredientDetails from '../burger-ingredients/ingredient-details/ingredient-details'
@@ -86,6 +87,11 @@ export default function App() {
                         element={<OnlyAuth component={<div />} />}
                     />
                 </Route>
+
+                <Route
+                    path="/feed"
+                    element={<OnlyAuth component={<Feed />} />}
+                />
 
                 <Route path="*" element={<NotFound />} />
             </Routes>

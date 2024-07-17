@@ -20,10 +20,10 @@ const navItems: Record<string, TNavItem> = {
         title: 'Конструктор',
         url: '/',
     },
-    orders: {
+    feed: {
         icon: (type) => <ListIcon type={type} />,
         title: 'Лента заказов',
-        url: '/orders',
+        url: '/feed',
     },
     profile: {
         icon: (type) => <ProfileIcon type={type} />,
@@ -60,7 +60,7 @@ export default function AppHeader() {
             <nav className={styles.navigation}>
                 <div className={styles.links}>
                     {renderNavigationItem(navItems.home)}
-                    {renderNavigationItem(navItems.orders)}
+                    {renderNavigationItem(navItems.feed)}
                 </div>
 
                 <NavLink to="/">
