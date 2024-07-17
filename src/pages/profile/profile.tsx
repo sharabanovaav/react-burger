@@ -1,6 +1,6 @@
-import { useDispatch } from 'react-redux'
 import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDispatch } from '../../services/store'
 import styles from './profile.module.css'
 import { logout } from '../../services/user/actions'
 

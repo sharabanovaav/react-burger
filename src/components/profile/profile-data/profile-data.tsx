@@ -4,7 +4,7 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useEffect, FormEvent } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from '../../../services/store'
 import { getUser } from '../../../services/user/reducer'
 import { updateUser } from '../../../services/user/actions'
 import styles from './profile-data.module.css'

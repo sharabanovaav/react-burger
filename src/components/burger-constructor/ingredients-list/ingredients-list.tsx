@@ -1,8 +1,8 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useSelector, useDispatch } from 'react-redux'
 import { useDrop } from 'react-dnd'
 import { useState } from 'react'
 import { nanoid } from '@reduxjs/toolkit'
+import { useDispatch, useSelector } from '../../../services/store'
 import styles from './ingredients-list.module.css'
 import {
     deleteIngredient,

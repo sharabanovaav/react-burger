@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from '../../services/store'
 import AppHeader from '../app-header/app-header'
 import {
     setIsAuthChecked,

@@ -2,9 +2,9 @@ import {
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from '../../services/store'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
