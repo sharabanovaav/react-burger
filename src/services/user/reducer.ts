@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TUser } from '../../types'
 import {
     login,
@@ -26,10 +26,10 @@ export const userSlice = createSlice({
         getIsAuthChecked: (state) => state.isAuthChecked,
     },
     reducers: {
-        setUser: (state, action) => {
+        setUser: (state, action: PayloadAction<TUser | null>) => {
             state.user = action.payload
         },
-        setIsAuthChecked: (state, action) => {
+        setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
             state.isAuthChecked = action.payload
         },
     },
@@ -38,18 +38,18 @@ export const userSlice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 state.user = null
             })
-            .addCase(login.fulfilled, (state, action) => {
+            .addCase(login.fulfilled, (state, action: PayloadAction<TUser | null>) => {
                 state.user = action.payload
                 state.isAuthChecked = true
             })
-            .addCase(getUserAction.fulfilled, (state, action) => {
+            .addCase(getUserAction.fulfilled, (state, action: PayloadAction<TUser | null>) => {
                 state.user = action.payload
                 state.isAuthChecked = true
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state, action: PayloadAction<TUser | null>) => {
                 state.user = action.payload
             })
-            .addCase(updateUser.fulfilled, (state, action) => {
+            .addCase(updateUser.fulfilled, (state, action: PayloadAction<TUser | null>) => {
                 state.user = action.payload
             })
     },
@@ -57,3 +57,5 @@ export const userSlice = createSlice({
 
 export const { setUser, setIsAuthChecked } = userSlice.actions
 export const { getUser, getIsAuthChecked } = userSlice.selectors
+
+export type TUserActions = ReturnType<typeof userSlice.actions[keyof typeof userSlice.actions]>;

@@ -9,7 +9,7 @@ import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
-import { useModal } from "../../hooks/use-modal"
+import { useModal } from '../../hooks/use-modal'
 import {
     getTotalPrice,
     getIngredients,
@@ -42,7 +42,6 @@ export default function BurgerConstructor() {
         if (!user) {
             navigate('/login')
         } else {
-            // @ts-ignore
             dispatch(createOrder(orderRequest))
             openModal()
         }

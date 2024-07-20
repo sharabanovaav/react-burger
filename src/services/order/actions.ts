@@ -1,11 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { TIngredient } from '../../types'
 import { api } from '../../utils/api'
-import { TThunkAPI } from '../store'
 
-export const createOrder = createAsyncThunk<number, TIngredient[], TThunkAPI>(
+export const createOrder = createAsyncThunk(
     'order/makeOrder',
-    async (request: TIngredient[]) => {
+    async (request: string[]) => {
         const {
             order: { number },
         } = await api.makeOrder(request)

@@ -34,12 +34,10 @@ export default function App() {
     const { state } = location
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(loadIngredients())
 
         if (localStorage.getItem('accessToken')) {
             if (!user) {
-                // @ts-ignore
                 dispatch(getUser())
             }
         } else {

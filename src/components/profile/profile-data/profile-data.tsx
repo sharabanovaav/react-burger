@@ -27,7 +27,6 @@ export function ProfileData() {
         const { email, name, password } = values
 
         dispatch(
-            // @ts-ignore
             updateUser({
                 email,
                 name,

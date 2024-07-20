@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createOrder } from './actions'
 
 type TState = {
@@ -23,7 +23,7 @@ export const orderSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(createOrder.fulfilled, (state, action) => {
+            .addCase(createOrder.fulfilled, (state, action: PayloadAction<number | null>) => {
                 state.loading = false
                 state.orderId = action.payload
             })
@@ -39,3 +39,5 @@ export const orderSlice = createSlice({
 
 export const { getOrderId, getLoading } = orderSlice.selectors
 export const { reset } = orderSlice.actions
+
+export type TOrderActions = ReturnType<typeof orderSlice.actions[keyof typeof orderSlice.actions]>;

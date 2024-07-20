@@ -49,7 +49,7 @@ export const fetchWithRefresh = async <T>(endpoint: string, options?: RequestIni
     }
 }
 
-const makeOrder = (ingredients: TIngredient[]) =>
+const makeOrder = (ingredients: string[]) =>
     fetchWithRefresh<TOrderResponse>('orders', {
         headers: {
             'Content-Type': 'application/json',

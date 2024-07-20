@@ -24,7 +24,6 @@ export function Login() {
         const { email, password } = values
 
         dispatch(
-            // @ts-ignore
             login({
                 email,
                 password,

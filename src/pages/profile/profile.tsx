@@ -27,7 +27,6 @@ export function Profile() {
     }
 
     const handleLogout = () => {
-        // @ts-ignore
         dispatch(logout())
     }
 

@@ -25,7 +25,6 @@ export function Register() {
         const { email, name, password } = values
 
         dispatch(
-            // @ts-ignore // TODO: FIXME:
             registerUser({
                 name,
                 email,
