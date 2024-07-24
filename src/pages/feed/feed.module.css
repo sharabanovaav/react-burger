@@ -8,5 +8,12 @@
     display: grid;
     grid-template-columns: 608px 1fr;
     gap: 60px;
+}
 
+.orders {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    overflow: auto;
+    max-height: 70vh;
 }

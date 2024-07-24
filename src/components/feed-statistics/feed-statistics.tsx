@@ -1,7 +1,11 @@
 import styles from './feed-statistics.module.css'
 
 export function FeedStatistics() {
-    const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    const DISPLAYED_QUANTITY = 10
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].slice(
+        0,
+        DISPLAYED_QUANTITY
+    )
 
     return (
         <section>
@@ -12,6 +16,7 @@ export function FeedStatistics() {
                     <ul className={styles.list}>
                         {nums.map((num) => (
                             <li
+                                key={num}
                                 className={`text text_type_digits-default ${styles.ready}`}
                             >
                                 {num}
@@ -26,7 +31,10 @@ export function FeedStatistics() {
                     </h2>
                     <ul className={styles.list}>
                         {nums.map((num) => (
-                            <li className="text text_type_digits-default">
+                            <li
+                                key={num}
+                                className="text text_type_digits-default"
+                            >
                                 {num}
                             </li>
                         ))}

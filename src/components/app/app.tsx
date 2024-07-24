@@ -24,6 +24,8 @@ import {
 import IngredientDetails from '../burger-ingredients/ingredient-details/ingredient-details'
 import { ProfileData } from '../profile/profile-data/profile-data'
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route'
+import { OrderInfo } from '../order-info/order-info'
+import { ProfileOrders } from '../profile/profile-orders/profile-orders'
 
 export default function App() {
     const user = useSelector(getUserSelector)
@@ -82,14 +84,17 @@ export default function App() {
                     />
                     <Route
                         path="orders"
-                        element={<OnlyAuth component={<div />} />}
+                        element={<OnlyAuth component={<ProfileOrders />} />}
                     />
                 </Route>
 
                 <Route
-                    path="/feed"
-                    element={<OnlyAuth component={<Feed />} />}
+                    path="/profile/orders/:id"
+                    element={<OnlyAuth component={<OrderInfo />} />}
                 />
+
+                <Route path="/feed" element={<Feed />} />
+                <Route path="/feed/:id" element={<OrderInfo />} />
 
                 <Route path="*" element={<NotFound />} />
             </Routes>
@@ -104,6 +109,24 @@ export default function App() {
                                 onClose={() => navigate(-1)}
                             >
                                 <IngredientDetails />
+                            </Modal>
+                        }
+                    />
+
+                    <Route
+                        path="/feed/:id"
+                        element={
+                            <Modal onClose={() => navigate(-1)}>
+                                <OrderInfo />
+                            </Modal>
+                        }
+                    />
+
+                    <Route
+                        path="/profile/orders/:id"
+                        element={
+                            <Modal onClose={() => navigate(-1)}>
+                                <OrderInfo />
                             </Modal>
                         }
                     />
