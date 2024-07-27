@@ -125,9 +125,13 @@ export default function App() {
                     <Route
                         path="/profile/orders/:id"
                         element={
-                            <Modal onClose={() => navigate(-1)}>
-                                <OrderInfo />
-                            </Modal>
+                            <OnlyAuth
+                                component={
+                                    <Modal onClose={() => navigate(-1)}>
+                                        <OrderInfo />
+                                    </Modal>
+                                }
+                            />
                         }
                     />
                 </Routes>
