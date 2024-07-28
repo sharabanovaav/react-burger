@@ -52,6 +52,10 @@ export function ProfileOrders() {
                     <OrderCard order={order} />
                 </Link>
             ))}
+
+            {!orders.length && (
+                <h2 className="text text_type_main-medium mb-6">Заказов нет</h2>
+            )}
         </section>
     )
 }

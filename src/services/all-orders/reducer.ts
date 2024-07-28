@@ -6,6 +6,7 @@ type TState = {
     total: number | null;
     totalToday: number | null;
     connectionError: string | null;
+    loaded: boolean
 }
 
 const initialState: TState = {
@@ -13,6 +14,7 @@ const initialState: TState = {
     total: null,
     totalToday: null,
     connectionError: null,
+    loaded: false
 };
 
 export const allOrdersSlice = createSlice({
@@ -22,6 +24,7 @@ export const allOrdersSlice = createSlice({
         getOrders: state => state.orders,
         getTotal: state => state.total,
         getTotalToday: state => state.totalToday,
+        getLoaded: state => state.loaded,
     },
     reducers: {
         wsOpen: (state) => {
@@ -32,6 +35,7 @@ export const allOrdersSlice = createSlice({
         },
         wsMessage: (state, action: PayloadAction<TAllOrdersResponse>) => {
             const {orders, total, totalToday} = action.payload
+            state.loaded = true
             state.orders = orders
             state.total = total
             state.totalToday = totalToday
@@ -40,4 +44,4 @@ export const allOrdersSlice = createSlice({
 })
 
 export const { wsOpen, wsError, wsMessage } = allOrdersSlice.actions;
-export const { getOrders, getTotal, getTotalToday } = allOrdersSlice.selectors;
+export const { getOrders, getTotal, getTotalToday, getLoaded } = allOrdersSlice.selectors;

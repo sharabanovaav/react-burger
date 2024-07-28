@@ -53,3 +53,7 @@
 .done {
     color: #00CCCC;
 }
+
+.canceled {
+    color: red;
+}
