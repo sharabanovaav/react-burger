@@ -1,50 +1,39 @@
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FeedStatistics } from '../../components/feed-statistics/feed-statistics'
 import { OrderCard } from '../../components/order-card/order-card'
+import {
+    allOrdersWsConnect,
+    allOrdersWsDisconnect,
+} from '../../services/all-orders/actions'
+import {
+    getOrders,
+    getTotal,
+    getTotalToday,
+} from '../../services/all-orders/reducer'
+import { useDispatch, useSelector } from '../../services/store'
 import styles from './feed.module.css'
 
-const orders = [
-    {
-        ingredients: [
-            {
-                _id: '643d69a5c3f7b9001cfa093c',
-                name: 'Краторная булка N-200i',
-                type: 'bun',
-                proteins: 80,
-                fat: 24,
-                carbohydrates: 53,
-                calories: 420,
-                price: 1255,
-                image: 'https://code.s3.yandex.net/react/code/bun-02.png',
-                image_mobile:
-                    'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
-                image_large:
-                    'https://code.s3.yandex.net/react/code/bun-02-large.png',
-                __v: 0,
-            },
-            {
-                _id: '643d69a5c3f7b9001cfa0941',
-                name: 'Биокотлета из марсианской Магнолии',
-                type: 'main',
-                proteins: 420,
-                fat: 142,
-                carbohydrates: 242,
-                calories: 4242,
-                price: 424,
-                image: 'https://code.s3.yandex.net/react/code/meat-01.png',
-                image_mobile:
-                    'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
-                image_large:
-                    'https://code.s3.yandex.net/react/code/meat-01-large.png',
-                __v: 0,
-            },
-        ],
-        id: 1,
-    },
-]
+const WS_URL = 'wss://norma.nomoreparties.space/orders/all'
 
 export function Feed() {
+    const dispatch = useDispatch()
+    const orders = useSelector(getOrders)
+    const total = useSelector(getTotal)
+    const totalToday = useSelector(getTotalToday)
+
     const location = useLocation()
+
+    const connect = () => dispatch(allOrdersWsConnect(WS_URL))
+    const disconnect = () => dispatch(allOrdersWsDisconnect())
+
+    useEffect(() => {
+        connect()
+
+        return () => {
+            disconnect()
+        }
+    }, [])
 
     return (
         <main className={`${styles.wrapper} mt-10`}>
@@ -58,8 +47,8 @@ export function Feed() {
                                 color: 'inherit',
                                 textDecoration: 'inherit',
                             }}
-                            key={order.id}
-                            to={`/feed/${order.id}`}
+                            key={order._id}
+                            to={`/feed/${order.number}`}
                             state={{ backgroundLocation: location }}
                         >
                             <OrderCard order={order} />
@@ -67,7 +56,13 @@ export function Feed() {
                     ))}
                 </section>
 
-                <FeedStatistics />
+                <section className={`${styles.statistics} custom-scroll`}>
+                    <FeedStatistics
+                        orders={orders}
+                        total={total ?? 0}
+                        totalToday={totalToday ?? 0}
+                    />
+                </section>
             </div>
         </main>
     )

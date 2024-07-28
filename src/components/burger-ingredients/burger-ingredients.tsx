@@ -1,6 +1,5 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useState, useRef, useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import styles from './burger-ingredients.module.css'
 import IngredientCard from './ingredient-card/ingredient-card'
@@ -11,8 +10,9 @@ import {
 } from '../../services/burger-constructor/reducer'
 import { BUNS_QUANTITY } from '../../consts'
 import { TIngredient, TIngredientType } from '../../types'
+import { useSelector } from '../../services/store'
 
-type TIndredientTab= {
+type TIndredientTab = {
     name: string
     type: TIngredientType
 }
@@ -37,7 +37,9 @@ export default function BurgerIngredients() {
     const constructorIngredients = useSelector(getConstructorIngredients)
     const bun = useSelector(getBun)
 
-    const [activeTabType, setActiveTabType] = useState<TIngredientType>(ingredientTabs[0].type)
+    const [activeTabType, setActiveTabType] = useState<TIngredientType>(
+        ingredientTabs[0].type
+    )
 
     const tabsRef = useRef<HTMLDivElement | null>(null)
     const titlesRefs = useRef<HTMLDivElement[]>([])
@@ -61,12 +63,15 @@ export default function BurgerIngredients() {
 
     const ingredientsDict = useMemo(
         () =>
-            ingredients.reduce((dict, ingredient) => {
-                dict[ingredient.type] ??= []
+            ingredients.reduce(
+                (dict, ingredient) => {
+                    dict[ingredient.type] ??= []
 
-                dict[ingredient.type].push(ingredient)
-                return dict
-            }, {} as Record<TIngredientType, TIngredient[]>),
+                    dict[ingredient.type].push(ingredient)
+                    return dict
+                },
+                {} as Record<TIngredientType, TIngredient[]>
+            ),
         [ingredients]
     )
 
@@ -89,7 +94,10 @@ export default function BurgerIngredients() {
         titlesRefs.current[index].scrollIntoView({ behavior: 'smooth' })
     }
 
-    const renderTypeTab = ({ type, name }: TIndredientTab, index: number): JSX.Element => (
+    const renderTypeTab = (
+        { type, name }: TIndredientTab,
+        index: number
+    ): JSX.Element => (
         <Tab
             key={type}
             value={type}
@@ -100,7 +108,10 @@ export default function BurgerIngredients() {
         </Tab>
     )
 
-    const renderIngredients = ({ type, name }: TIndredientTab, index: number): JSX.Element => (
+    const renderIngredients = (
+        { type, name }: TIndredientTab,
+        index: number
+    ): JSX.Element => (
         <div
             key={`ingredient-${type}`}
             ref={(el) => {

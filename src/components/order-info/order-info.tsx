@@ -1,41 +1,79 @@
 import { FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components'
+import { useEffect, useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import { StatusesNames } from '../../consts'
+import { getOrders as getAllOrders } from '../../services/all-orders/reducer'
+import { getIngredients } from '../../services/ingredients/reducer'
+import { getOrderByNumber } from '../../services/order/actions'
+import { getOrder } from '../../services/order/reducer'
+import { useDispatch, useSelector } from '../../services/store'
+import { getOrders as getUserOrders } from '../../services/user-orders/reducer'
 import { TIngredient } from '../../types'
 import Price from '../price/price'
 import styles from './order-info.module.css'
 
-const ingredients = [
-    {
-        _id: '643d69a5c3f7b9001cfa093c',
-        name: 'Филе Люминесцентного тетраодонтимформа',
-        type: 'bun',
-        proteins: 80,
-        fat: 24,
-        carbohydrates: 53,
-        calories: 420,
-        price: 1255,
-        image: 'https://code.s3.yandex.net/react/code/bun-02.png',
-        image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
-        image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
-        __v: 0,
-    },
-    {
-        _id: '643d69a5c3f7b9001cfa0941',
-        name: 'Биокотлета из марсианской Магнолии',
-        type: 'main',
-        proteins: 420,
-        fat: 142,
-        carbohydrates: 242,
-        calories: 4242,
-        price: 424,
-        image: 'https://code.s3.yandex.net/react/code/meat-01.png',
-        image_mobile:
-            'https://code.s3.yandex.net/react/code/meat-01-mobile.png',
-        image_large: 'https://code.s3.yandex.net/react/code/meat-01-large.png',
-        __v: 0,
-    },
-]
-
 export function OrderInfo() {
+    const { number: strNumber } = useParams()
+    const dispatch = useDispatch()
+
+    const allOrders = useSelector(getAllOrders)
+    const userOrders = useSelector(getUserOrders)
+    const loadedOrder = useSelector(getOrder)
+    const allIngredients = useSelector(getIngredients)
+
+    const number = useMemo(() => +(strNumber ?? 0), [strNumber])
+
+    const order = useMemo(
+        () =>
+            allOrders.find(({ number: id }) => id === number) ||
+            userOrders.find(({ number: id }) => id === number) ||
+            loadedOrder,
+        [allOrders, userOrders, loadedOrder, number]
+    )
+
+    const ingredientsMap = useMemo(
+        () =>
+            new Map(
+                allIngredients.map((ingredient) => [ingredient._id, ingredient])
+            ),
+        [allIngredients]
+    )
+
+    const ingredients = useMemo(
+        () =>
+            (order?.ingredients ?? [])
+                .map((ingredientId) => ingredientsMap.get(ingredientId))
+                .filter(
+                    (ingredient): ingredient is TIngredient =>
+                        ingredient !== undefined
+                ),
+        [order, ingredientsMap]
+    )
+
+    const totalPrice = useMemo(
+        () => ingredients.reduce((sum, { price }) => sum + price, 0),
+        [ingredients]
+    )
+
+    const indredientsQuantities = useMemo(
+        () =>
+            ingredients.reduce(
+                (res, { _id }) => {
+                    res[_id] = res[_id] ? res[_id] + 1 : 1
+
+                    return res
+                },
+                {} as Record<string, number>
+            ),
+        [ingredients]
+    )
+
+    useEffect(() => {
+        if (!order) {
+            dispatch(getOrderByNumber(number))
+        }
+    }, [number, order, dispatch])
+
     const renderIngredient = ({ _id, name, price, image }: TIngredient) => (
         <div key={_id} className={styles.ingredient}>
             <div className={`${styles.imageWrapper} mr-4`}>
@@ -45,36 +83,49 @@ export function OrderInfo() {
             <div className="text text_type_main-default">{name}</div>
 
             <div className={styles.price}>
-                <Price price={`2 x ${price}`} />
+                <Price
+                    price={`${indredientsQuantities[_id] ?? 0} x ${price}`}
+                />
             </div>
         </div>
     )
+
     return (
         <main className={styles.order}>
-            <p className={`text text_type_digits-default mb-10 ${styles.id}`}>
-                #12345
-            </p>
-            <h3 className="text text_type_main-medium mb-3">name</h3>
-            <p
-                className={`text text_type_main-default ${true && styles.ready} mb-15`}
-            >
-                State
-            </p>
-            <h3 className="text text_type_main-medium mb-6">Состав:</h3>
+            {order && (
+                <>
+                    <p
+                        className={`text text_type_digits-default mb-10 ${styles.id}`}
+                    >
+                        #{order._id}
+                    </p>
+                    <h3 className="text text_type_main-medium mb-3">
+                        {order.name}
+                    </h3>
+                    <p
+                        className={`text text_type_main-default mb-15 ${styles[order.status]}`}
+                    >
+                        {StatusesNames[order.status]}
+                    </p>
+                    <h3 className="text text_type_main-medium mb-6">Состав:</h3>
 
-            <div className={`${styles.ingredients} custom-scroll pr-6 mb-10`}>
-                {ingredients.map((ingredient) =>
-                    renderIngredient(ingredient as TIngredient)
-                )}
-            </div>
+                    <div
+                        className={`${styles.ingredients} custom-scroll pr-6 mb-10`}
+                    >
+                        {[...new Set(ingredients)].map((ingredient) =>
+                            renderIngredient(ingredient as TIngredient)
+                        )}
+                    </div>
 
-            <div className={styles.footer}>
-                <FormattedDate
-                    className="text text_type_main-default text_color_inactive"
-                    date={new Date('2022-10-10T17:33:32.877Z')}
-                />
-                <Price price={510} />
-            </div>
+                    <div className={styles.footer}>
+                        <FormattedDate
+                            className="text text_type_main-default text_color_inactive"
+                            date={new Date(order.updatedAt)}
+                        />
+                        <Price price={totalPrice} />
+                    </div>
+                </>
+            )}
         </main>
     )
 }

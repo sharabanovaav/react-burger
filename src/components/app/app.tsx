@@ -8,7 +8,6 @@ import {
 } from '../../services/user/reducer'
 import { getUser } from '../../services/user/actions'
 import { loadIngredients } from '../../services/ingredients/actions'
-
 import Modal from '../modal/modal'
 import {
     Home,
@@ -26,6 +25,7 @@ import { ProfileData } from '../profile/profile-data/profile-data'
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route'
 import { OrderInfo } from '../order-info/order-info'
 import { ProfileOrders } from '../profile/profile-orders/profile-orders'
+import { ACCESS_TOKEN_LC_KEY } from '../../consts/local-storage-keys'
 
 export default function App() {
     const user = useSelector(getUserSelector)
@@ -38,7 +38,7 @@ export default function App() {
     useEffect(() => {
         dispatch(loadIngredients())
 
-        if (localStorage.getItem('accessToken')) {
+        if (localStorage.getItem(ACCESS_TOKEN_LC_KEY)) {
             if (!user) {
                 dispatch(getUser())
             }
@@ -89,12 +89,27 @@ export default function App() {
                 </Route>
 
                 <Route
-                    path="/profile/orders/:id"
-                    element={<OnlyAuth component={<OrderInfo />} />}
+                    path="/profile/orders/:number"
+                    element={
+                        <OnlyAuth
+                            component={
+                                <div className="mt-30">
+                                    <OrderInfo />
+                                </div>
+                            }
+                        />
+                    }
                 />
 
                 <Route path="/feed" element={<Feed />} />
-                <Route path="/feed/:id" element={<OrderInfo />} />
+                <Route
+                    path="/feed/:number"
+                    element={
+                        <div className="mt-30">
+                            <OrderInfo />
+                        </div>
+                    }
+                />
 
                 <Route path="*" element={<NotFound />} />
             </Routes>
@@ -114,7 +129,7 @@ export default function App() {
                     />
 
                     <Route
-                        path="/feed/:id"
+                        path="/feed/:number"
                         element={
                             <Modal onClose={() => navigate(-1)}>
                                 <OrderInfo />
@@ -123,7 +138,7 @@ export default function App() {
                     />
 
                     <Route
-                        path="/profile/orders/:id"
+                        path="/profile/orders/:number"
                         element={
                             <OnlyAuth
                                 component={

@@ -3,7 +3,7 @@ import {
     ACCESS_TOKEN_LC_KEY,
     REFRESH_TOKEN_LC_KEY,
 } from '../consts/local-storage-keys'
-import { TIngredient, TIngredientsResponse, TLoginResponse, TOrderResponse, TResetForm, TTokenResponse, TUserForm, TUserResponse } from '../types'
+import { TGetOrderByNumberResponse, TIngredientsResponse, TLoginResponse, TCreateOrderResponse, TResetForm, TTokenResponse, TUserForm, TUserResponse } from '../types'
 
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api'
 
@@ -50,7 +50,7 @@ export const fetchWithRefresh = async <T>(endpoint: string, options?: RequestIni
 }
 
 const makeOrder = (ingredients: string[]) =>
-    fetchWithRefresh<TOrderResponse>('orders', {
+    fetchWithRefresh<TCreateOrderResponse>('orders', {
         headers: {
             'Content-Type': 'application/json',
             Authorization: localStorage.getItem(ACCESS_TOKEN_LC_KEY) ?? '',
@@ -59,6 +59,11 @@ const makeOrder = (ingredients: string[]) =>
         body: JSON.stringify({
             ingredients,
         }),
+    })
+
+const getOrderByNumber = (reduest: number) =>
+    request<TGetOrderByNumberResponse>(`orders/${reduest}`, {
+        method: 'GET',
     })
 
 const getUser = () =>
@@ -167,4 +172,5 @@ export const api = {
     makeOrder,
     resetPassword,
     getIngredients,
+    getOrderByNumber,
 }

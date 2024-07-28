@@ -4,13 +4,13 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect , FormEvent } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, FormEvent } from 'react'
 import { api } from '../../utils/api'
 import { getUser } from '../../services/user/reducer'
 import { RESET_PASSWORD_LC_KEY } from '../../consts/local-storage-keys'
 import { useForm } from '../../hooks/use-form'
 import { TResetForm } from '../../types'
+import { useSelector } from '../../services/store'
 
 export function ResetPassword() {
     const user = useSelector(getUser)
