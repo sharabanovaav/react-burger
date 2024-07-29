@@ -3,12 +3,6 @@
     width: 240px;
 }
 
-.price {
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-}
-
 .card {
     display: flex;
     row-gap: 4px;

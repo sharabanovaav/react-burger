@@ -1,0 +1,9 @@
+.ready {
+    color: #00CCCC;
+}
+
+.orders {
+    display: grid;
+    gap: 36px;
+    grid-template-columns: 1fr 1fr;
+}

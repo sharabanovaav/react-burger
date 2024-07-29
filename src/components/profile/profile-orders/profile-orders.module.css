@@ -1,0 +1,7 @@
+.orders {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    overflow: auto;
+    max-height: 80vh;
+}

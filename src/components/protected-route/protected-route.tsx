@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux'
 import { Navigate, useLocation } from 'react-router-dom'
+import { useSelector } from '../../services/store'
 import { getIsAuthChecked, getUser } from '../../services/user/reducer'
 import Loader from '../loader/loader'
 
@@ -12,7 +12,10 @@ type TOnlyUnAuthProps = {
     component: JSX.Element
 }
 
-function ProtectedRoute({ onlyUnAuth = false, component }: TProtectedRouteProps) {
+function ProtectedRoute({
+    onlyUnAuth = false,
+    component,
+}: TProtectedRouteProps) {
     const isAuthChecked = useSelector(getIsAuthChecked)
     const user = useSelector(getUser)
     const location = useLocation()

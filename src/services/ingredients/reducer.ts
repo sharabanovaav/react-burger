@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TIngredient } from '../../types'
 import { loadIngredients } from './actions'
 
@@ -22,7 +22,7 @@ export const ingredientsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(loadIngredients.fulfilled, (state, action) => {
+            .addCase(loadIngredients.fulfilled, (state, action: PayloadAction<TIngredient[]>) => {
                 state.loading = false
                 state.ingredients = action.payload
             })
@@ -37,3 +37,5 @@ export const ingredientsSlice = createSlice({
 })
 
 export const { getIngredients, getLoading } = ingredientsSlice.selectors
+
+export type TIngredientsActions = ReturnType<typeof ingredientsSlice.actions[keyof typeof ingredientsSlice.actions]>;

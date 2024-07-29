@@ -2,14 +2,14 @@ import {
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from '../../services/store'
 import styles from './burger-constructor.module.css'
 import IngredientsList from './ingredients-list/ingredients-list'
 import Modal from '../modal/modal'
 import OrderDetails from './order-details/order-details'
-import { useModal } from "../../hooks/use-modal"
+import { useModal } from '../../hooks/use-modal'
 import {
     getTotalPrice,
     getIngredients,
@@ -42,7 +42,6 @@ export default function BurgerConstructor() {
         if (!user) {
             navigate('/login')
         } else {
-            // @ts-ignore
             dispatch(createOrder(orderRequest))
             openModal()
         }

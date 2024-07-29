@@ -1,6 +1,6 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from '../../services/store'
 import AppHeader from '../app-header/app-header'
 import {
     setIsAuthChecked,
@@ -8,7 +8,6 @@ import {
 } from '../../services/user/reducer'
 import { getUser } from '../../services/user/actions'
 import { loadIngredients } from '../../services/ingredients/actions'
-
 import Modal from '../modal/modal'
 import {
     Home,
@@ -18,11 +17,15 @@ import {
     ForgotPassword,
     ResetPassword,
     Profile,
+    Feed,
 } from '../../pages'
 
 import IngredientDetails from '../burger-ingredients/ingredient-details/ingredient-details'
 import { ProfileData } from '../profile/profile-data/profile-data'
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route'
+import { OrderInfo } from '../order-info/order-info'
+import { ProfileOrders } from '../profile/profile-orders/profile-orders'
+import { ACCESS_TOKEN_LC_KEY } from '../../consts/local-storage-keys'
 
 export default function App() {
     const user = useSelector(getUserSelector)
@@ -33,12 +36,10 @@ export default function App() {
     const { state } = location
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(loadIngredients())
 
-        if (localStorage.getItem('accessToken')) {
+        if (localStorage.getItem(ACCESS_TOKEN_LC_KEY)) {
             if (!user) {
-                // @ts-ignore
                 dispatch(getUser())
             }
         } else {
@@ -83,9 +84,32 @@ export default function App() {
                     />
                     <Route
                         path="orders"
-                        element={<OnlyAuth component={<div />} />}
+                        element={<OnlyAuth component={<ProfileOrders />} />}
                     />
                 </Route>
+
+                <Route
+                    path="/profile/orders/:number"
+                    element={
+                        <OnlyAuth
+                            component={
+                                <div className="mt-30">
+                                    <OrderInfo />
+                                </div>
+                            }
+                        />
+                    }
+                />
+
+                <Route path="/feed" element={<Feed />} />
+                <Route
+                    path="/feed/:number"
+                    element={
+                        <div className="mt-30">
+                            <OrderInfo />
+                        </div>
+                    }
+                />
 
                 <Route path="*" element={<NotFound />} />
             </Routes>
@@ -101,6 +125,28 @@ export default function App() {
                             >
                                 <IngredientDetails />
                             </Modal>
+                        }
+                    />
+
+                    <Route
+                        path="/feed/:number"
+                        element={
+                            <Modal onClose={() => navigate(-1)}>
+                                <OrderInfo />
+                            </Modal>
+                        }
+                    />
+
+                    <Route
+                        path="/profile/orders/:number"
+                        element={
+                            <OnlyAuth
+                                component={
+                                    <Modal onClose={() => navigate(-1)}>
+                                        <OrderInfo />
+                                    </Modal>
+                                }
+                            />
                         }
                     />
                 </Routes>

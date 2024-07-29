@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux'
 import styles from './order-details.module.css'
 import imageDone from '../../../images/done.png'
 import { getOrderId, getLoading } from '../../../services/order/reducer'
 import Loader from '../../loader/loader'
+import { useSelector } from '../../../services/store'
 
 export default function OrderDetails() {
     const orderId = useSelector(getOrderId)

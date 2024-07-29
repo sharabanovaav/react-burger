@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { BUNS_QUANTITY } from '../../consts'
 import { TIngredient } from '../../types'
 
@@ -29,16 +29,16 @@ export const burgerConstructorSlice = createSlice({
     },
     reducers: {
         reset: () => initialState,
-        setBun(state, action) {
+        setBun(state, action: PayloadAction<TIngredient | null>) {
             state.bun = action.payload
         },
-        setIngredients(state, action) {
+        setIngredients(state, action: PayloadAction<TIngredient[]>) {
             state.ingredients = action.payload
         },
-        addIngredient(state, action) {
+        addIngredient(state, action: PayloadAction<TIngredient>) {
             state.ingredients.push(action.payload)
         },
-        deleteIngredient(state, action) {
+        deleteIngredient(state, action: PayloadAction<string>) {
             state.ingredients = state.ingredients.filter(
                 (ingredient) => ingredient.customId !== action.payload
             )
@@ -55,3 +55,5 @@ export const {
     deleteIngredient,
     reset,
 } = burgerConstructorSlice.actions
+
+export type TBurgerConstructorActions = ReturnType<typeof burgerConstructorSlice.actions[keyof typeof burgerConstructorSlice.actions]>;

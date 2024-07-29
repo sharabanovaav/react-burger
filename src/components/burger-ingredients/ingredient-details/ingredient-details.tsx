@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import { useMemo } from 'react'
 import styles from './ingredient-details.module.css'
@@ -8,9 +7,13 @@ import {
 } from '../../../services/ingredients/reducer'
 import Loader from '../../loader/loader'
 import { TIngredient } from '../../../types'
+import { useSelector } from '../../../services/store'
 
 type TNutrition = {
-    key: keyof Pick<TIngredient, 'calories' | 'proteins' | 'fat' | 'carbohydrates'>
+    key: keyof Pick<
+        TIngredient,
+        'calories' | 'proteins' | 'fat' | 'carbohydrates'
+    >
     name: string
 }
 
@@ -41,11 +44,16 @@ export default function IngredientDetails() {
 
     const ingredientsMap = useMemo(
         () =>
-            new Map(ingredients.map((ingredient) => [ingredient._id, ingredient])),
+            new Map(
+                ingredients.map((ingredient) => [ingredient._id, ingredient])
+            ),
         [ingredients]
     )
 
-    const details = useMemo(() => ingredientsMap.get(id ?? ''), [id, ingredientsMap])
+    const details = useMemo(
+        () => ingredientsMap.get(id ?? ''),
+        [id, ingredientsMap]
+    )
 
     const renderNutrition = (name: string, value: number): JSX.Element => (
         <div key={name} className={styles.nutrition}>

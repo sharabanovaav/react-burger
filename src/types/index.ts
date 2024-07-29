@@ -18,18 +18,15 @@ export type TUserResponse = {
     user: TUser
 }
 
-export type TIngredientsResponse = {
-    data: TIngredient[]
-}
-
 export type TLoginResponse = TTokenResponse & TUserResponse
 
-export type TOrderResponse = {
+export type TCreateOrderResponse = {
     success: boolean
     order: {
         number: number
     }
 }
+
 
 export type TResetForm = {
     token: string
@@ -50,6 +47,35 @@ export type TIngredient = {
     fat: number
     carbohydrates: number
     customId?: string
+}
+
+export type TIngredientsResponse = {
+    data: TIngredient[]
+}
+
+export type TOrder = {
+    _id: string
+    ingredients: string[]
+    status: 'done' | 'created' | 'pending' 
+    name: string
+    createdAt: string
+    updatedAt: string
+    number: number
+}
+
+export type TAllOrdersResponse = {
+    orders: TOrder[]
+    total: number
+    totalToday: number
+}
+
+export type TUserOrdersResponse = {
+    orders: TOrder[]
+}
+
+export type TGetOrderByNumberResponse = {
+    success: boolean
+    orders: TOrder[]
 }
 
 export type TIconTypes = 'secondary' | 'primary' | 'error' | 'success'

@@ -4,8 +4,8 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { FormEvent } from 'react'
+import { useDispatch } from '../../services/store'
 import { registerUser } from '../../services/user/actions'
 import { useForm } from '../../hooks/use-form'
 import { TUserForm } from '../../types'
@@ -25,7 +25,6 @@ export function Register() {
         const { email, name, password } = values
 
         dispatch(
-            // @ts-ignore
             registerUser({
                 name,
                 email,

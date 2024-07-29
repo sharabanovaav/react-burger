@@ -1,0 +1,54 @@
+.order {
+    width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.id {
+    text-align: center;
+}
+
+.done {
+    color: #00CCCC;
+}
+
+.canceled {
+    color: red;
+}
+
+.ingredients {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    max-height: 30vh;
+    overflow: auto;
+}
+
+.ingredient {
+    display: flex;
+    align-items: center;
+}
+
+.price {
+    margin-left: auto;
+}
+
+.imageWrapper {
+    height: 64px;
+    width: 64px;
+    background: #131316;
+    border: 2px solid #801AB2;
+    border-radius: 50%;
+}
+
+.image {
+    object-fit: cover;
+    height: 64px;
+    width: 64px;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
