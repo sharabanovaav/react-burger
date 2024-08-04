@@ -6,7 +6,7 @@ type TState = {
     connectionError: string | null;
 }
 
-const initialState: TState = {
+export const initialState: TState = {
     orders: [],
     connectionError: null,
 };
