@@ -63,7 +63,10 @@ export default function BurgerConstructor() {
         <section className="p-25 pl-4 pr-4">
             <IngredientsList />
 
-            <div className={`${styles.footer} mt-10`}>
+            <div
+                className={`${styles.footer} mt-10`}
+                data-testid="constructor-footer"
+            >
                 <div className={styles.price}>
                     <span className="text text_type_digits-medium">
                         {totalPrice}

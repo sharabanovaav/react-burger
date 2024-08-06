@@ -122,17 +122,21 @@ export default function BurgerIngredients() {
 
             <div className={`${styles.list} pl-4 pr-4`}>
                 {ingredientsDict[type].map((ingredient) => (
-                    <Link
-                        style={{ color: 'inherit', textDecoration: 'inherit' }}
-                        key={ingredient._id}
-                        to={`/ingredients/${ingredient._id}`}
-                        state={{ backgroundLocation: location }}
-                    >
-                        <IngredientCard
-                            ingredient={ingredient}
-                            count={ingredientsCountDict[ingredient._id]}
-                        />
-                    </Link>
+                    <div key={ingredient._id} data-testid="ingredient-link">
+                        <Link
+                            style={{
+                                color: 'inherit',
+                                textDecoration: 'inherit',
+                            }}
+                            to={`/ingredients/${ingredient._id}`}
+                            state={{ backgroundLocation: location }}
+                        >
+                            <IngredientCard
+                                ingredient={ingredient}
+                                count={ingredientsCountDict[ingredient._id]}
+                            />
+                        </Link>
+                    </div>
                 ))}
             </div>
         </div>

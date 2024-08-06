@@ -31,8 +31,17 @@ export default function IngredientCard({
     })
 
     return (
-        <div className={styles.card} ref={dragRef} style={{ opacity }}>
-            {count > 0 && <Counter count={count} size="default" />}
+        <div
+            className={styles.card}
+            ref={dragRef}
+            style={{ opacity }}
+            data-testid={`ingredient-card-${ingredient.type}`}
+        >
+            {count > 0 && (
+                <div data-testid="counter">
+                    <Counter count={count} size="default" />
+                </div>
+            )}
             <img
                 className={`${styles.image} ml-4 mr-4`}
                 src={ingredient.image}

@@ -105,7 +105,10 @@ export default function IngredientDetails() {
     }
 
     return (
-        <section className={`${styles.content} mt-20`}>
+        <section
+            className={`${styles.content} mt-20`}
+            data-testid="ingredient-details"
+        >
             {renderDetails()}
         </section>
     )
