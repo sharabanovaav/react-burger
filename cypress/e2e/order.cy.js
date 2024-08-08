@@ -1,24 +1,39 @@
+import {
+    ACCESS_TOKEN_LC_KEY,
+    REFRESH_TOKEN_LC_KEY,
+} from '../../src/consts/local-storage-keys'
+
+import {
+    CONSTRUCTOR_FOOTER,
+    INGREDIENT_DROP_TARGET,
+    MODAL,
+} from '../../src/consts/e2e-selectors'
+
 describe('Order creating is OK', () => {
     beforeEach(() => {
         window.localStorage.setItem(
-            'accessToken',
+            ACCESS_TOKEN_LC_KEY,
             JSON.stringify('accessToken')
         )
         window.localStorage.setItem(
-            'refreshToken',
+            REFRESH_TOKEN_LC_KEY,
             JSON.stringify('refreshToken')
         )
 
-        cy.intercept('GET', 'ingredients', { fixture: 'ingredients' })
         cy.intercept('GET', 'user', { fixture: 'user' })
         cy.intercept('POST', 'orders', { fixture: 'order' })
 
-        cy.visit('http://localhost:3000/')
+        cy.init()
+    })
+
+    afterEach(() => {
+        window.localStorage.removeItem(ACCESS_TOKEN_LC_KEY)
+        window.localStorage.removeItem(REFRESH_TOKEN_LC_KEY)
     })
 
     it('should create order', () => {
-        cy.get('[data-testid="constructor-footer"]').get('button').as('button')
-        cy.get('[data-testid=ingredient-drop-target]').as('target')
+        cy.get(`[data-testid=${CONSTRUCTOR_FOOTER}]`).get('button').as('button')
+        cy.get(`[data-testid=${INGREDIENT_DROP_TARGET}]`).as('target')
 
         cy.get('@button').should('be.disabled')
 
@@ -33,6 +48,6 @@ describe('Order creating is OK', () => {
         cy.get('@button').should('be.enabled')
         cy.get('@button').click()
 
-        cy.get('[data-testid=modal]').should('be.visible')
+        cy.get(`[data-testid=${MODAL}]`).should('be.visible')
     })
 })

@@ -11,6 +11,7 @@ import {
 import { BUNS_QUANTITY } from '../../consts'
 import { TIngredient, TIngredientType } from '../../types'
 import { useSelector } from '../../services/store'
+import { INGREDIENT_LINK } from '../../consts/e2e-selectors'
 
 type TIndredientTab = {
     name: string
@@ -122,7 +123,7 @@ export default function BurgerIngredients() {
 
             <div className={`${styles.list} pl-4 pr-4`}>
                 {ingredientsDict[type].map((ingredient) => (
-                    <div key={ingredient._id} data-testid="ingredient-link">
+                    <div key={ingredient._id} data-testid={INGREDIENT_LINK}>
                         <Link
                             style={{
                                 color: 'inherit',

@@ -15,6 +15,11 @@ import {
 import IngredientStub from '../ingredient-stub/ingredient-stub'
 import DraggableIngredient from '../draggable-ingredient/draggable-ingredient'
 import { TIngredient, TIngredientType } from '../../../types'
+import {
+    CONSTRUCTOR_INGREDIENT,
+    CONSTRUCTOR_INGREDIENT_BUN,
+    INGREDIENT_DROP_TARGET,
+} from '../../../consts/e2e-selectors'
 
 export default function IngredientsList() {
     const ingredients = useSelector(getIngredients)
@@ -63,7 +68,7 @@ export default function IngredientsList() {
     ): JSX.Element => (
         <div className="ml-8">
             {bun ? (
-                <div data-testid="constructor-ingredient-bun">
+                <div data-testid={CONSTRUCTOR_INGREDIENT_BUN}>
                     <ConstructorElement
                         type={type}
                         isLocked
@@ -86,7 +91,7 @@ export default function IngredientsList() {
         <div
             className={styles.wrapper}
             ref={dropTarget}
-            data-testid="ingredient-drop-target"
+            data-testid={INGREDIENT_DROP_TARGET}
         >
             {renderBun('top', 'верх')}
 
@@ -95,7 +100,7 @@ export default function IngredientsList() {
                     {ingredients.map((ingredient, index) => (
                         <div
                             key={ingredient.customId}
-                            data-testid="constructor-ingredient"
+                            data-testid={CONSTRUCTOR_INGREDIENT}
                         >
                             <DraggableIngredient
                                 index={index}

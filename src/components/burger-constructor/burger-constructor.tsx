@@ -19,6 +19,7 @@ import {
 import { createOrder } from '../../services/order/actions'
 import { reset } from '../../services/order/reducer'
 import { getUser } from '../../services/user/reducer'
+import { CONSTRUCTOR_FOOTER } from '../../consts/e2e-selectors'
 
 export default function BurgerConstructor() {
     const user = useSelector(getUser)
@@ -65,7 +66,7 @@ export default function BurgerConstructor() {
 
             <div
                 className={`${styles.footer} mt-10`}
-                data-testid="constructor-footer"
+                data-testid={CONSTRUCTOR_FOOTER}
             >
                 <div className={styles.price}>
                     <span className="text text_type_digits-medium">

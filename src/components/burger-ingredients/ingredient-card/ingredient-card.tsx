@@ -1,6 +1,7 @@
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { useDrag } from 'react-dnd'
+import { COUNTER } from '../../../consts/e2e-selectors'
 import { TIngredient } from '../../../types'
 import Price from '../../price/price'
 import styles from './ingredient-card.module.css'
@@ -38,7 +39,7 @@ export default function IngredientCard({
             data-testid={`ingredient-card-${ingredient.type}`}
         >
             {count > 0 && (
-                <div data-testid="counter">
+                <div data-testid={COUNTER}>
                     <Counter count={count} size="default" />
                 </div>
             )}

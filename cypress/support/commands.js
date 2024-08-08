@@ -35,3 +35,8 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('init', () => {
+    cy.intercept('GET', 'ingredients', { fixture: 'ingredients' })
+    cy.visit('/')
+})
