@@ -37,10 +37,12 @@ export type TIngredientType = "sauce" | "main" | "bun"
 
 export type TIngredient = {
     _id: string
+    __v: number
     price: number
     name: string
     image: string
     image_large: string
+    image_mobile: string
     type: TIngredientType
     calories: number
     proteins: number

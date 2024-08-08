@@ -9,7 +9,7 @@ type TState = {
     loaded: boolean
 }
 
-const initialState: TState = {
+export const initialState: TState = {
     orders: [],
     total: null,
     totalToday: null,

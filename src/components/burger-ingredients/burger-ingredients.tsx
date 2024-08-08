@@ -11,6 +11,7 @@ import {
 import { BUNS_QUANTITY } from '../../consts'
 import { TIngredient, TIngredientType } from '../../types'
 import { useSelector } from '../../services/store'
+import { INGREDIENT_LINK } from '../../consts/e2e-selectors'
 
 type TIndredientTab = {
     name: string
@@ -122,17 +123,21 @@ export default function BurgerIngredients() {
 
             <div className={`${styles.list} pl-4 pr-4`}>
                 {ingredientsDict[type].map((ingredient) => (
-                    <Link
-                        style={{ color: 'inherit', textDecoration: 'inherit' }}
-                        key={ingredient._id}
-                        to={`/ingredients/${ingredient._id}`}
-                        state={{ backgroundLocation: location }}
-                    >
-                        <IngredientCard
-                            ingredient={ingredient}
-                            count={ingredientsCountDict[ingredient._id]}
-                        />
-                    </Link>
+                    <div key={ingredient._id} data-testid={INGREDIENT_LINK}>
+                        <Link
+                            style={{
+                                color: 'inherit',
+                                textDecoration: 'inherit',
+                            }}
+                            to={`/ingredients/${ingredient._id}`}
+                            state={{ backgroundLocation: location }}
+                        >
+                            <IngredientCard
+                                ingredient={ingredient}
+                                count={ingredientsCountDict[ingredient._id]}
+                            />
+                        </Link>
+                    </div>
                 ))}
             </div>
         </div>

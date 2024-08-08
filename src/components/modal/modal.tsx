@@ -3,6 +3,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useEffect, ReactNode } from 'react'
 import styles from './modal.module.css'
 import ModalOverlay from './modal-overlay/modal-overlay'
+import { MODAL, MODAL_CLOSE_ICON } from '../../consts/e2e-selectors'
 
 type TModalProps = {
     children: ReactNode
@@ -24,22 +25,30 @@ export default function Modal({ title = '', children, onClose }: TModalProps) {
         return () => window.removeEventListener('keydown', closeHandler)
     }, [onClose])
 
-    return modalRoot ? ReactDOM.createPortal(
-        <>
-            <ModalOverlay onClose={onClose} />
+    return modalRoot
+        ? ReactDOM.createPortal(
+              <>
+                  <ModalOverlay onClose={onClose} />
 
-            <div className={`${styles.modal} pt-10 pl-10 pr-10 pb-15`}>
-                <div className={`${styles.header}`}>
-                    <h1 className="text text_type_main-large">{title}</h1>
+                  <div
+                      className={`${styles.modal} pt-10 pl-10 pr-10 pb-15`}
+                      data-testid={MODAL}
+                  >
+                      <div className={`${styles.header}`}>
+                          <h1 className="text text_type_main-large">{title}</h1>
 
-                    <div className={styles.icon}>
-                        <CloseIcon type="primary" onClick={onClose} />
-                    </div>
-                </div>
+                          <div
+                              className={styles.icon}
+                              data-testid={MODAL_CLOSE_ICON}
+                          >
+                              <CloseIcon type="primary" onClick={onClose} />
+                          </div>
+                      </div>
 
-                {children}
-            </div>
-        </>,
-        modalRoot
-    ) : null
+                      {children}
+                  </div>
+              </>,
+              modalRoot
+          )
+        : null
 }
