@@ -7,7 +7,7 @@ type TState = {
     loading: boolean
 }
 
-const initialState: TState = {
+export const initialState: TState = {
     ingredients: [],
     loading: false,
 }

@@ -15,6 +15,11 @@ import {
 import IngredientStub from '../ingredient-stub/ingredient-stub'
 import DraggableIngredient from '../draggable-ingredient/draggable-ingredient'
 import { TIngredient, TIngredientType } from '../../../types'
+import {
+    CONSTRUCTOR_INGREDIENT,
+    CONSTRUCTOR_INGREDIENT_BUN,
+    INGREDIENT_DROP_TARGET,
+} from '../../../consts/e2e-selectors'
 
 export default function IngredientsList() {
     const ingredients = useSelector(getIngredients)
@@ -30,13 +35,15 @@ export default function IngredientsList() {
         },
         drop(ingredient) {
             setHoveredType('')
-            if (ingredient.type === "bun") {
+            if (ingredient.type === 'bun') {
                 dispatch(setBun(ingredient))
             } else {
-                dispatch(addIngredient({
-                    ...ingredient,
-                    customId: nanoid(),
-                }))
+                dispatch(
+                    addIngredient({
+                        ...ingredient,
+                        customId: nanoid(),
+                    })
+                )
             }
         },
     })
@@ -55,47 +62,62 @@ export default function IngredientsList() {
         dispatch(setIngredients(newIngredients))
     }
 
-    const renderBun = (type: "top" | "bottom", comment: string): JSX.Element => (
+    const renderBun = (
+        type: 'top' | 'bottom',
+        comment: string
+    ): JSX.Element => (
         <div className="ml-8">
             {bun ? (
-                <ConstructorElement
-                    type={type}
-                    isLocked
-                    text={`${bun.name} (${comment})`}
-                    price={bun.price}
-                    thumbnail={bun.image}
-                />
+                <div data-testid={CONSTRUCTOR_INGREDIENT_BUN}>
+                    <ConstructorElement
+                        type={type}
+                        isLocked
+                        text={`${bun.name} (${comment})`}
+                        price={bun.price}
+                        thumbnail={bun.image}
+                    />
+                </div>
             ) : (
                 <IngredientStub
                     title="Выберите булки"
                     type={type}
-                    hovered={hoveredType === "bun"}
+                    hovered={hoveredType === 'bun'}
                 />
             )}
         </div>
     )
 
     return (
-        <div className={styles.wrapper} ref={dropTarget}>
+        <div
+            className={styles.wrapper}
+            ref={dropTarget}
+            data-testid={INGREDIENT_DROP_TARGET}
+        >
             {renderBun('top', 'верх')}
 
             {ingredients.length > 0 ? (
                 <div className={`${styles.fillings} custom-scroll`}>
                     {ingredients.map((ingredient, index) => (
-                        <DraggableIngredient
+                        <div
                             key={ingredient.customId}
-                            index={index}
-                            ingredient={ingredient}
-                            onDelete={deleteHandler}
-                            onMove={moveHandler}
-                        />
+                            data-testid={CONSTRUCTOR_INGREDIENT}
+                        >
+                            <DraggableIngredient
+                                index={index}
+                                ingredient={ingredient}
+                                onDelete={deleteHandler}
+                                onMove={moveHandler}
+                            />
+                        </div>
                     ))}
                 </div>
             ) : (
                 <div className="ml-8">
                     <IngredientStub
                         title="Выберите начинку"
-                        hovered={hoveredType === "main" || hoveredType === "sauce"}
+                        hovered={
+                            hoveredType === 'main' || hoveredType === 'sauce'
+                        }
                     />
                 </div>
             )}

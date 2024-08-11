@@ -8,7 +8,7 @@ type TState = {
     order: TOrder | null
 }
 
-const initialState: TState = {
+export const initialState: TState = {
     orderId: null,
     loading: false,
     order: null

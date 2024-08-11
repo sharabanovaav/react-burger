@@ -7,7 +7,7 @@ type TState = {
     ingredients: TIngredient[]
 }
 
-const initialState: TState = {
+export const initialState: TState = {
     bun: null,
     ingredients: [],
 }
